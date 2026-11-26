@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // отрисовка карточек как в  мейне, но тут крч да
         products.forEach(prod => {
-            // тут ничего нет
+        // тут ничего нет
         });
     }
 });

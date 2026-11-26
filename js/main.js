@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 6,
             title: "Сайт FS 'Тускул'",
-            category: "Цифрлвой проект",
+            category: "Цифровой проект",
             price: 15,
             school: "IT-Cube",
             image: "images/products/picture6.jpg"
