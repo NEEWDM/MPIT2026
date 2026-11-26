@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузить проект | FS "Тускул"</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/upload.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="index.html" class="logo-area">
+                <img src="images/logo/logo.png" alt="Logo" class="logo-img">
+                <div class="logo-text"><h1>FS "Тускул"</h1></div>
+            </a>
+            <nav class="main-nav">
+                <a href="index.html">Главная</a>
+                <a href="catalog.html">Каталог</a>
+                <a href="profile.html">Профиль</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container section-padding">
+        
+        <!-- Сообщение для неавторизованных (показывается если нет пользователя) -->
+        <section id="auth-required" class="auth-required hidden">
+            <div class="auth-required-card">
+                <h2>⚠️ Требуется авторизация</h2>
+                <p>Чтобы загрузить свой проект, необходимо войти в аккаунт или зарегистрироваться.</p>
+                <a href="profile.html" class="btn btn-primary">Войти / Регистрация</a>
+            </div>
+        </section>
+
+        <!-- Форма загрузки (показывается только авторизованным) -->
+        <section id="upload-section" class="upload-container hidden">
+            <h2 class="page-title">Загрузить новый проект</h2>
+            <p class="page-subtitle">Поделитесь своей работой с другими школьниками и центрами творчества</p>
+
+            <form id="upload-form" class="upload-form">
+                
+                <!-- Загрузка фото -->
+                <div class="form-group">
+                    <label>Фотография проекта *</label>
+                    <div class="file-upload-area" id="file-upload-area">
+                        <input type="file" id="product-image" accept="image/*" required hidden>
+                        <div class="upload-placeholder" id="upload-placeholder">
+                            <span class="upload-icon">📷</span>
+                            <p>Нажмите или перетащите фото сюда</p>
+                            <span class="upload-hint">JPG, PNG до 5MB</span>
+                        </div>
+                        <img id="image-preview" class="image-preview hidden" alt="Превью">
+                    </div>
+                    <div class="upload-progress hidden" id="upload-progress">
+                        <div class="progress-bar"></div>
+                        <span>Загрузка фото...</span>
+                    </div>
+                </div>
+
+                <!-- Название -->
+                <div class="form-group">
+                    <label for="product-title">Название проекта *</label>
+                    <input type="text" id="product-title" placeholder="Например: Робот-манипулятор v2.0" required maxlength="100">
+                </div>
+
+                <!-- Описание -->
+                <div class="form-group">
+                    <label for="product-description">Описание</label>
+                    <textarea id="product-description" placeholder="Расскажите о своём проекте: что это, как сделано, особенности..." rows="4" maxlength="500"></textarea>
+                </div>
+
+                <!-- Категория и цена в одну строку -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-category">Категория *</label>
+                        <select id="product-category" required>
+                            <option value="">Выберите категорию</option>
+                            <option value="3d_print">3D Печать</option>
+                            <option value="robotics">Робототехника</option>
+                            <option value="woodwork">Дерево</option>
+                            <option value="metalwork">Металл</option>
+                            <option value="souvenirs">Сувениры</option>
+                            <option value="digital">Цифровой проект</option>
+                            <option value="crafts">Поделки</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Цена (₽) *</label>
+                        <input type="number" id="product-price" placeholder="0" min="0" max="100000" required>
+                    </div>
+                </div>
+
+                <!-- Школа/учреждение -->
+                <div class="form-group">
+                    <label for="product-school">Школа / Учреждение *</label>
+                    <input type="text" id="product-school" placeholder="Например: ЦДТТ 'Импульс'" required maxlength="100">
+                </div>
+
+                <!-- Ключевые слова (для будущего поиска) -->
+                <div class="form-group">
+                    <label for="product-tags">Ключевые слова</label>
+                    <input type="text" id="product-tags" placeholder="arduino, робот, 3d, школа (через запятую)">
+                    <span class="form-hint">Поможет покупателям найти ваш проект</span>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        🚀 Опубликовать проект
+                    </button>
+                    <a href="profile.html" class="btn btn-outline">Отмена</a>
+                </div>
+
+                <!-- Сообщение об успехе/ошибке -->
+                <div id="form-message" class="form-message hidden"></div>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container copyright">&copy; 2026 FS "Тускул". Моя Профессия ИТ.</div>
+    </footer>
+
+    <script src="js/upload.js"></script>
+</body>
+</html>
