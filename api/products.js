@@ -1,4 +1,3 @@
-// Vercel Serverless Function для товаров
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
@@ -11,20 +10,21 @@ export default async function handler(req, res) {
         const products = database.collection('products');
 
         if (req.method === 'GET') {
-            // Получить все товары
             const allProducts = await products.find({}).toArray();
-            res.status(200).json(allProducts);
+            return res.status(200).json(allProducts);
         } else if (req.method === 'POST') {
-            // Добавить товар (требует авторизации)
             const product = {
                 ...req.body,
                 createdAt: new Date()
             };
             const result = await products.insertOne(product);
-            res.status(201).json({ id: result.insertedId, ...product });
+            return res.status(201).json({ id: result.insertedId, ...product });
+        } else {
+            return res.status(405).json({ error: 'Method not allowed' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('API Error:', error);
+        return res.status(500).json({ error: error.message });
     } finally {
         await client.close();
     }

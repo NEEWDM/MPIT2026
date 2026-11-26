@@ -29,14 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // РЕГИСТРАЦИЯ
-    document.getElementById('register-form').addEventListener('submit', async (e) => {
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         try {
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    action: 'register',
                     name: document.getElementById('reg-name').value,
                     school: document.getElementById('reg-school').value,
                     email: document.getElementById('reg-email').value,
@@ -63,10 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    action: 'login',
                     email: e.target.querySelector('input[type="text"]').value,
                     password: e.target.querySelector('input[type="password"]').value
                 })
