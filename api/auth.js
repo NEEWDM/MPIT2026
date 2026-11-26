@@ -1,22 +1,45 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-
 module.exports = async function handler(req, res) {
+    // CORS заголовки
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
+    // Проверка переменной окружения
+    if (!process.env.MONGODB_URI) {
+        console.error('MONGODB_URI не установлен!');
+        return res.status(500).json({ error: 'Database configuration error' });
+    }
+
+    let client;
     try {
+        client = new MongoClient(process.env.MONGODB_URI);
         await client.connect();
+        
         const database = client.db('tuscul');
         const users = database.collection('users');
 
         const { action, name, school, email, password, skills } = req.body;
 
+        if (!action) {
+            return res.status(400).json({ error: 'Action не указан' });
+        }
+
         if (action === 'register') {
+            if (!name || !school || !email || !password || !skills) {
+                return res.status(400).json({ error: 'Заполните все поля' });
+            }
+
             const existingUser = await users.findOne({ email });
             if (existingUser) {
                 return res.status(400).json({ error: 'Пользователь уже существует' });
@@ -37,7 +60,7 @@ module.exports = async function handler(req, res) {
             
             return res.status(201).json({
                 user: {
-                    id: result.insertedId,
+                    id: result.insertedId.toString(),
                     name,
                     school,
                     email,
@@ -45,6 +68,10 @@ module.exports = async function handler(req, res) {
                 }
             });
         } else if (action === 'login') {
+            if (!email || !password) {
+                return res.status(400).json({ error: 'Укажите email и пароль' });
+            }
+
             const user = await users.findOne({ email });
 
             if (!user) {
@@ -58,7 +85,7 @@ module.exports = async function handler(req, res) {
 
             return res.status(200).json({
                 user: {
-                    id: user._id,
+                    id: user._id.toString(),
                     name: user.name,
                     school: user.school,
                     email: user.email,
@@ -70,8 +97,13 @@ module.exports = async function handler(req, res) {
         }
     } catch (error) {
         console.error('API Error:', error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ 
+            error: error.message,
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     } finally {
-        await client.close();
+        if (client) {
+            await client.close();
+        }
     }
 }
