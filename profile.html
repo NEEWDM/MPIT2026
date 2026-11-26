@@ -117,16 +117,19 @@
                         <!-- Навыки добавятся через JS -->
                     </div>
                     
-                    <!-- Блок контактов (добавляется динамически) -->
+                    <!-- Блок контактов -->
                     <div class="user-contacts" id="dash-contacts">
                         <!-- Контакты добавятся через JS -->
                     </div>
                     
-                    <button id="edit-contacts-btn" class="btn btn-secondary" style="margin-top:15px;">
-                        ✏️ Редактировать контакты
-                    </button>
-                <div class="admin-actions" id="admin-actions" style="display:none;">
-                    <a href="admin.html" class="btn btn-primary">⚙️ Панель администратора</a>
+                    <div class="profile-actions">
+                        <button id="edit-contacts-btn" class="btn btn-secondary">
+                            ✏️ Редактировать контакты
+                        </button>
+                        <div class="admin-actions" id="admin-actions" style="display:none;">
+                            <a href="admin.html" class="btn btn-primary">⚙️ Панель администратора</a>
+                        </div>
+                    </div>
                 </div>
                 <button id="logout-btn" class="btn btn-outline">Выйти</button>
             </div>
@@ -147,7 +150,7 @@
                 </div>
             </div>
 
-            <!-- Управление товарами -->
+            <!-- Мои работы -->
             <div class="my-products-section">
                 <div class="section-header">
                     <h3>Мои работы</h3>
@@ -155,16 +158,18 @@
                 </div>
                 
                 <div id="my-products-grid" class="products-grid">
-                    <!-- Сюда JS загрузит товары конкретного пользователя -->
+                    <!-- Сюда JS загрузит товары -->
                 </div>
             </div>
-            <div class="my-orders-section" style="margin-top:50px;">
+
+            <!-- Мои заказы -->
+            <div class="my-orders-section">
                 <div class="section-header">
                     <h3>Мои заказы</h3>
                 </div>
                 
                 <div id="my-orders-grid" class="orders-grid">
-                    <!-- Сюда JS загрузит заказы пользователя -->
+                    <!-- Сюда JS загрузит заказы -->
                 </div>
             </div>
 
