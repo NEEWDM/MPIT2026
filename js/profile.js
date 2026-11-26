@@ -119,8 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('dash-school').textContent = `🏫 ${user.school}`;
         document.getElementById('dash-skills').innerHTML = `<span>${user.skills}</span>`;
 
+                if (user.contacts) {
+            displayContactsInProfile(user.contacts);
+        }
+        
         // Загружаем и отображаем товары пользователя
         renderMyProducts();
+        
     }
 
     // === ЗАГРУЗКА И РЕНДЕР МОИХ ТОВАРОВ ИЗ БД ===
@@ -180,5 +185,154 @@ document.addEventListener('DOMContentLoaded', () => {
             'crafts': 'Поделки'
         };
         return names[code] || code;
+    }
+        // === РЕДАКТИРОВАНИЕ КОНТАКТОВ ===
+    const editContactsBtn = document.getElementById('edit-contacts-btn');
+    const contactsModal = document.getElementById('contacts-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const cancelEditBtn = document.getElementById('cancel-edit');
+    const contactsForm = document.getElementById('contacts-form');
+    const contactsMessage = document.getElementById('contacts-message');
+
+    // Открыть модальное окно
+    if (editContactsBtn) {
+        editContactsBtn.addEventListener('click', () => {
+            // Заполняем форму текущими контактами
+            if (currentUser && currentUser.contacts) {
+                document.getElementById('edit-email').value = currentUser.contacts.email || '';
+                document.getElementById('edit-phone').value = currentUser.contacts.phone || '';
+                document.getElementById('edit-telegram').value = currentUser.contacts.telegram || '';
+                document.getElementById('edit-vk').value = currentUser.contacts.vk || '';
+            }
+            
+            contactsModal.classList.remove('hidden');
+            contactsMessage.classList.add('hidden');
+        });
+    }
+
+    // Закрыть модальное окно
+    function closeModal() {
+        contactsModal.classList.add('hidden');
+        contactsForm.reset();
+        contactsMessage.classList.add('hidden');
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', closeModal);
+    }
+
+    // Закрытие по клику вне модального окна
+    if (contactsModal) {
+        contactsModal.addEventListener('click', (e) => {
+            if (e.target === contactsModal) {
+                closeModal();
+            }
+        });
+    }
+
+    // Отправка формы
+    if (contactsForm) {
+        contactsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser || !currentUser.id) {
+                showContactsMessage('Пользователь не авторизован', 'error');
+                return;
+            }
+
+            const newContacts = {
+                email: document.getElementById('edit-email').value.trim(),
+                phone: document.getElementById('edit-phone').value.trim(),
+                telegram: document.getElementById('edit-telegram').value.trim(),
+                vk: document.getElementById('edit-vk').value.trim()
+            };
+
+            // Убираем пустые поля
+            Object.keys(newContacts).forEach(key => {
+                if (!newContacts[key]) delete newContacts[key];
+            });
+
+            try {
+                const response = await fetch('/api/update-contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        contacts: newContacts
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Обновляем currentUser в localStorage
+                    currentUser.contacts = newContacts;
+                    localStorage.setItem('tuscul_user', JSON.stringify(currentUser));
+                    
+                    showContactsMessage('✓ Контакты обновлены', 'success');
+                    
+                    // Обновляем отображение контактов в профиле
+                    displayContactsInProfile(newContacts);
+                    
+                    // Закрываем модалку через 1.5 секунды
+                    setTimeout(closeModal, 1500);
+                } else {
+                    throw new Error(data.error || 'Ошибка при сохранении');
+                }
+            } catch (error) {
+                console.error('Update contacts error:', error);
+                showContactsMessage('Ошибка: ' + error.message, 'error');
+            }
+        });
+    }
+
+    // Отображение контактов в профиле
+    function displayContactsInProfile(contacts) {
+        let contactsContainer = document.querySelector('.user-contacts');
+        
+        if (!contactsContainer) {
+            // Создаём контейнер, если его нет
+            contactsContainer = document.createElement('div');
+            contactsContainer.className = 'user-contacts';
+            document.querySelector('.user-info').appendChild(contactsContainer);
+        }
+
+        if (!contacts || Object.keys(contacts).length === 0) {
+            contactsContainer.innerHTML = '<h4>📞 Контакты</h4><p style="color:#999; font-size:0.9rem;">Не указаны</p>';
+            return;
+        }
+
+        let contactsHTML = '<h4>📞 Контакты</h4>';
+        
+        if (contacts.email) {
+            contactsHTML += `<div class="contact-item-small">📧 <a href="mailto:${contacts.email}">${contacts.email}</a></div>`;
+        }
+        if (contacts.phone) {
+            contactsHTML += `<div class="contact-item-small">📱 <a href="tel:${contacts.phone}">${contacts.phone}</a></div>`;
+        }
+        if (contacts.telegram) {
+            contactsHTML += `<div class="contact-item-small">✈️ <a href="https://t.me/${contacts.telegram.replace('@', '')}" target="_blank">${contacts.telegram}</a></div>`;
+        }
+        if (contacts.vk) {
+            contactsHTML += `<div class="contact-item-small">🔵 <a href="${contacts.vk}" target="_blank">Профиль VK</a></div>`;
+        }
+
+        contactsContainer.innerHTML = contactsHTML;
+    }
+
+    // Сообщение в модальном окне
+    function showContactsMessage(text, type) {
+        contactsMessage.textContent = text;
+        contactsMessage.className = 'form-message ' + type;
+        contactsMessage.classList.remove('hidden');
+    }
+
+    // Загружаем контакты при открытии профиля
+    if (currentUser && currentUser.contacts) {
+        displayContactsInProfile(currentUser.contacts);
     }
 });

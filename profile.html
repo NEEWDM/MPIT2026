@@ -97,7 +97,10 @@
                 <div class="user-info">
                     <h2 id="dash-name">Имя Пользователя</h2>
                     <p class="user-school" id="dash-school">🏫 Школа / Центр</p>
-                    <div class="user-skills" id="dash-skills">
+                    <div class="user-skills" id="dash-skills"> 
+                       <button id="edit-contacts-btn" class="btn btn-secondary" style="margin-top:15px;">
+                           ✏️ Редактировать контакты
+                       </button>
                         <!-- навыки через джаваскрипт тут -->
                     </div>
                 </div>
@@ -134,7 +137,38 @@
             </div>
 
         </section>
-
+                <!-- Модальное окно редактирования контактов -->
+        <div id="contacts-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Редактировать контакты</h3>
+                    <button id="close-modal" class="close-btn">&times;</button>
+                </div>
+                <form id="contacts-form">
+                    <div class="form-group">
+                        <label for="edit-email">📧 Email для связи</label>
+                        <input type="email" id="edit-email" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-phone">📱 Телефон</label>
+                        <input type="tel" id="edit-phone" placeholder="+7 (999) 123-45-67">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-telegram">✈️ Telegram</label>
+                        <input type="text" id="edit-telegram" placeholder="@username">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-vk">🔵 ВКонтакте</label>
+                        <input type="url" id="edit-vk" placeholder="https://vk.com/username">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <button type="button" id="cancel-edit" class="btn btn-outline">Отмена</button>
+                    </div>
+                    <div id="contacts-message" class="form-message hidden"></div>
+                </form>
+            </div>
+        </div>
     </main>
 
     <script src="js/main.js"></script> <!-- логика из основы -->
