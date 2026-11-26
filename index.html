@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FS "Тускул" | От школы к школе</title>
     
-    <!-- Подключение основных стилей -->
+    <!-- стили -->
     <link rel="stylesheet" href="css/main.css">
     
-    <!-- Шрифт (например, Roboto или Montserrat для техно-стиля) -->
+    <!-- шрифт который мне кинул Илюша -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- КОМПОНЕНТ: Шапка сайта (Header) -->
+    <!-- шапка -->
     <header class="site-header">
         <div class="container header-content">
             <div class="logo-area">
@@ -21,7 +21,7 @@
                 <img src="images/logo/logo.png" alt="Логотип Тускул" class="logo-img">
                 <div class="logo-text">
                     <h1>FS "Тускул"</h1>
-                    <span>From School to School</span>
+                    <span>From School - Тускул!</span>
                 </div>
             </div>
             
@@ -29,23 +29,23 @@
                 <ul>
                     <li><a href="index.html" class="active">Главная</a></li>
                     <li><a href="catalog.html">Каталог</a></li>
-                    <li><a href="upload.html">Продать модель</a></li>
-                    <li><a href="about.html">О проекте</a></li>
+                    <li><a href="upload.html">Загрузить</a></li>
+                    <li><a href="about.html">О нас</a></li>
                 </ul>
             </nav>
 
             <div class="user-actions">
-                <a href="profile.html" class="btn btn-outline">Войти</a>
-                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+                <a href="profile.html" class="btn btn-outline">Профиль</a>
+                <div class="cart-icon">🛒 <!-- ахахаххахахах тележка --><span id="cart-count">0</span></div>
             </div>
         </div>
     </header>
 
-    <!-- СЕКЦИЯ: Герой (Hero Section) - Приветствие -->
+    <!-- Серединка -->
     <section class="hero-section">
         <div class="container hero-content">
             <h2>Твои идеи — реальный доход</h2>
-            <p>Платформа для школьников и центров технического творчества. <br>Покупай уникальные 3D-модели, роботов и цифровые проекты.</p>
+            <p>Платформа для школьников и интересующихся. <br>Покупай уникальные 3D-модели, роботов, цифровые проекты и многое другое!</p>
             <div class="hero-buttons">
                 <a href="catalog.html" class="btn btn-primary">Смотреть каталог</a>
                 <a href="upload.html" class="btn btn-secondary">Начать зарабатывать</a>
@@ -53,41 +53,30 @@
         </div>
     </section>
 
-    <!-- СЕКЦИЯ: Популярные товары (Динамическая загрузка через JS) -->
+    <!-- Популар(здесь вставка из js) -->
     <section class="featured-products section-padding">
         <div class="container">
             <h3 class="section-title">Популярные работы</h3>
-            <!-- Сюда JavaScript будет вставлять карточки товаров -->
+            <!-- и тут сетка -->
             <div id="products-grid" class="products-grid">
-                <!-- Загрузчик (покажется до загрузки JS) -->
+                <!-- загрузчик -->
                 <p>Загрузка моделей...</p>
             </div>
         </div>
     </section>
 
-    <!-- КОМПОНЕНТ: Подвал (Footer) -->
+    <!-- подвал -->
     <footer class="site-footer">
         <div class="container footer-content">
             <div class="footer-col">
                 <h4>FS "Тускул"</h4>
-                <p>Проект для мероприятия "Моя Профессия ИТ".<br>Объединяем школы и технологии.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Навигация</h4>
-                <ul>
-                    <li><a href="#">Каталог</a></li>
-                    <li><a href="#">Правила площадки</a></li>
-                    <li><a href="#">Контакты</a></li>
-                </ul>
+                <p>Объединяем школы и технологии.</p>
             </div>
             <div class="footer-col">
                 <h4>Контакты</h4>
-                <p>info@tuscul-school.ru</p>
-                <p>МАУ ДО «ЦДТТ»</p>
+                <p>Tuscul@tuscul.tuscul</p>
+                <p>МАУ ДО «ЦДЮТТ»</p>
             </div>
-        </div>
-        <div class="copyright">
-            &copy; 2026 FS "Тускул". Все права защищены.
         </div>
     </footer>
 

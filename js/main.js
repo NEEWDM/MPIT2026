@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 1,
             title: "Портрет Путина на дереве",
-            category: "Робототехника",
+            category: "Дерево",
             price: 200,
             school: "НБСОШ2",
             image: "images/products/picture1.jpg" 
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             price: 15,
             school: "IT-Cube",
             image: "images/products/picture6.jpg"
-        }
+        },
     ];
 
     // рендер
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cartCount.innerText = currentCount + 1;
         
         // смешная вылезалка
-        alert(`товар с ID ${id} добавлен в корзину`);
+        alert(`Товар с ID ${id} добавлен в корзину`)
     };
 
     // рендер вызываем
