@@ -19,10 +19,26 @@ module.exports = async function handler(req, res) {
         const products = database.collection('products');
 
         if (req.method === 'GET') {
-            // Строим фильтр из query-параметров (для будущей страницы каталога)
             const filter = {};
             
-            if (req.query.userId) filter.userId = req.query.userId;
+            // По умолчанию показываем только одобренные проекты
+            // Если передан userId - показываем все проекты этого пользователя (для его профиля)
+            // Если передан status - фильтруем по статусу (для админки)
+            
+            if (req.query.userId) {
+                filter.userId = req.query.userId;
+                // Если есть параметр allStatus=true - показываем все статусы
+                if (req.query.allStatus !== 'true') {
+                    filter.status = 'approved';
+                }
+            } else if (req.query.status) {
+                // Фильтр по статусу (для админки)
+                filter.status = req.query.status;
+            } else {
+                // Публичный каталог - только одобренные
+                filter.status = 'approved';
+            }
+            
             if (req.query.category) filter.category = req.query.category;
             if (req.query.school) filter.school = { $regex: req.query.school, $options: 'i' };
             if (req.query.search) {

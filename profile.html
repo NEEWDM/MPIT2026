@@ -95,6 +95,10 @@
                         <input type="tel" id="reg-phone" placeholder="Телефон" style="margin-top:10px;">
                         <input type="text" id="reg-telegram" placeholder="Telegram (@username)" style="margin-top:10px;">
                     </div>
+                    <div class="form-group">
+                        <label for="reg-admin-code">Код администратора (необязательно)</label>
+                        <input type="text" id="reg-admin-code" placeholder="Оставьте пустым, если вы не админ">
+                    </div>
                     <button type="submit" class="btn btn-primary full-width">Создать аккаунт</button>
                 </form>
             </div>
@@ -121,6 +125,8 @@
                     <button id="edit-contacts-btn" class="btn btn-secondary" style="margin-top:15px;">
                         ✏️ Редактировать контакты
                     </button>
+                <div class="admin-actions" id="admin-actions" style="display:none;">
+                    <a href="admin.html" class="btn btn-primary">⚙️ Панель администратора</a>
                 </div>
                 <button id="logout-btn" class="btn btn-outline">Выйти</button>
             </div>

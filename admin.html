@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель администратора | FS "Тускул"</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo-area">
+                <img src="images/logo/logo.png" alt="Логотип Тускул" class="logo-img">
+                <div class="logo-text">
+                    <h1>FS "Тускул"</h1>
+                    <span>From School to School</span>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="upload.html">Продать модель</a></li>
+                    <li><a href="about.html">О проекте</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-actions">
+                <a href="profile.html" class="btn btn-outline">Мой профиль</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section-padding">
+        
+        <!-- Проверка доступа -->
+        <div id="access-denied" class="access-denied hidden">
+            <h2>🚫 Доступ запрещён</h2>
+            <p>У вас нет прав администратора для просмотра этой страницы.</p>
+            <a href="index.html" class="btn btn-primary">На главную</a>
+        </div>
+
+        <!-- Админ-панель -->
+        <div id="admin-panel" class="hidden">
+            <h1 class="admin-title">⚙️ Панель администратора</h1>
+            <p class="admin-subtitle">Модерация заявок на публикацию проектов</p>
+
+            <!-- Статистика -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-pending">0</span>
+                    <span class="stat-label">Ожидают проверки</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-approved">0</span>
+                    <span class="stat-label">Одобрено</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-rejected">0</span>
+                    <span class="stat-label">Отклонено</span>
+                </div>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="admin-filters">
+                <button class="filter-btn active" data-filter="pending">⏳ На модерации</button>
+                <button class="filter-btn" data-filter="approved">✅ Одобрено</button>
+                <button class="filter-btn" data-filter="rejected">❌ Отклонено</button>
+                <button class="filter-btn" data-filter="all">📋 Все заявки</button>
+            </div>
+
+            <!-- Список заявок -->
+            <div id="applications-list" class="applications-list">
+                <p class="loading-text">Загрузка заявок...</p>
+            </div>
+
+            <div id="no-applications" class="no-applications hidden">
+                <p>Нет заявок для отображения</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container copyright">&copy; 2026 FS "Тускул". Моя Профессия ИТ.</div>
+    </footer>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

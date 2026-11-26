@@ -47,6 +47,9 @@ module.exports = async function handler(req, res) {
 
             const hashedPassword = await bcrypt.hash(password, 10);
             
+            // Проверяем код администратора
+            const isAdmin = req.body.adminCode === 'TUSCUL-ADMIN-2026';
+
             const newUser = {
                 name,
                 school,
@@ -54,6 +57,7 @@ module.exports = async function handler(req, res) {
                 password: hashedPassword,
                 skills,
                 contacts: req.body.contacts || {},
+                isAdmin: isAdmin,
                 createdAt: new Date()
             };
 
@@ -84,15 +88,17 @@ module.exports = async function handler(req, res) {
                 return res.status(401).json({ error: 'Неверный пароль' });
             }
 
-            return res.status(200).json({
-                user: {
-                    id: user._id.toString(),
-                    name: user.name,
-                    school: user.school,
-                    email: user.email,
-                    skills: user.skills
-                }
-            });
+                return res.status(200).json({
+                    user: {
+                        id: user._id,
+                        name: user.name,
+                        school: user.school,
+                        email: user.email,
+                        skills: user.skills,
+                        contacts: user.contacts || {},
+                        isAdmin: user.isAdmin || false
+                    }
+                });
         } else {
             return res.status(400).json({ error: 'Неизвестное действие' });
         }

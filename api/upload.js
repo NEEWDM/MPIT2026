@@ -60,14 +60,15 @@ module.exports = async function handler(req, res) {
         const newProduct = {
             title: title.trim(),
             description: (description || '').trim(),
-            category: category,           // для фильтра по категории
+            category: category,
             price: Number(price),
-            school: school.trim(),        // для фильтра по учреждению
-            tags: Array.isArray(tags) ? tags : [],  // для поиска по ключевым словам
-            image: image,                 // URL фото из Cloudinary
-            userId: userId,               // для фильтра по автору
+            school: school.trim(),
+            tags: Array.isArray(tags) ? tags : [],
+            image: image,
+            userId: userId,
             authorName: authorName || '',
             authorEmail: authorEmail || '',
+            status: 'pending', // pending / approved / rejected
             createdAt: new Date(),
             views: 0,
             sales: 0

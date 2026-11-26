@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         email: document.getElementById('reg-email-contact').value,
                         phone: document.getElementById('reg-phone').value,
                         telegram: document.getElementById('reg-telegram').value
-                    }
+                    },
+                    adminCode: document.getElementById('reg-admin-code').value
                 })
             });
 
@@ -123,6 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Загружаем товары
         renderMyProducts();
+
+        const adminActions = document.getElementById('admin-actions');
+        if (adminActions && user.isAdmin) {
+            adminActions.style.display = 'block';
+        } else if (adminActions) {
+            adminActions.style.display = 'none';
+        }
     }
 
     // === ОТОБРАЖЕНИЕ КОНТАКТОВ В ПРОФИЛЕ ===
@@ -166,13 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '<p>Загрузка...</p>';
 
         try {
-            const response = await fetch('/api/products?userId=' + currentUser.id);
+            // Запрашиваем ВСЕ проекты пользователя (включая pending и rejected)
+            const response = await fetch('/api/products?userId=' + currentUser.id + '&allStatus=true');
             const myProducts = await response.json();
 
             grid.innerHTML = '';
 
-            // Обновляем счётчик товаров
-            document.getElementById('stat-products').textContent = myProducts.length || 0;
+            // Считаем только одобренные для статистики
+            const approvedCount = myProducts.filter(p => p.status === 'approved').length;
+            document.getElementById('stat-products').textContent = approvedCount;
 
             if (!myProducts || myProducts.length === 0) {
                 grid.innerHTML = '<div class="empty-state">У вас пока нет загруженных работ. <a href="upload.html" style="color: var(--color-accent);">Начните продавать свои умения!</a></div>';
@@ -180,11 +190,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             myProducts.forEach(product => {
+                // Определяем статус и стиль
+                let statusBadge = '';
+                let cardClass = '';
+                
+                if (product.status === 'pending') {
+                    statusBadge = '<span class="status-badge status-pending">⏳ На модерации</span>';
+                    cardClass = 'product-card-pending';
+                } else if (product.status === 'approved') {
+                    statusBadge = '<span class="status-badge status-approved">✅ Опубликовано</span>';
+                    cardClass = '';
+                } else if (product.status === 'rejected') {
+                    statusBadge = '<span class="status-badge status-rejected">❌ Отклонено</span>';
+                    cardClass = 'product-card-rejected';
+                }
+
                 const cardHTML = `
-                    <article class="product-card">
+                    <article class="product-card ${cardClass}">
                         <img src="${product.image}" alt="${product.title}" class="product-image"
                              onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                         <div class="product-info">
+                            ${statusBadge}
                             <div class="product-category">${getCategoryName(product.category)}</div>
                             <h3 class="product-title">${product.title}</h3>
                             <div class="product-meta">
