@@ -1,9 +1,9 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     try {
         await client.connect();
         const database = client.db('tuscul');

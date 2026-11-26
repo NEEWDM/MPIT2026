@@ -1,10 +1,10 @@
-import { MongoClient } from 'mongodb';
-import bcrypt from 'bcryptjs';
+const { MongoClient } = require('mongodb');
+const bcrypt = require('bcryptjs');
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
@@ -17,13 +17,11 @@ export default async function handler(req, res) {
         const { action, name, school, email, password, skills } = req.body;
 
         if (action === 'register') {
-            // Проверка существующего пользователя
             const existingUser = await users.findOne({ email });
             if (existingUser) {
                 return res.status(400).json({ error: 'Пользователь уже существует' });
             }
 
-            // Хеширование пароля
             const hashedPassword = await bcrypt.hash(password, 10);
             
             const newUser = {
