@@ -53,6 +53,7 @@ module.exports = async function handler(req, res) {
                 email,
                 password: hashedPassword,
                 skills,
+                contacts: req.body.contacts || {},
                 createdAt: new Date()
             };
 

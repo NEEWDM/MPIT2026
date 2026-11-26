@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCount.textContent = `Найдено: ${products.length}`;
 
         products.forEach(product => {
+            const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
+            
             const cardHTML = `
                 <article class="product-card">
                     <img src="${product.image}" alt="${product.title}" class="product-image"
@@ -53,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="product-info">
                         <div class="product-category">${getCategoryName(product.category)}</div>
                         <h3 class="product-title">${product.title}</h3>
-                        <p class="product-author">👤 ${product.authorName}</p>
+                        <p class="product-author">
+                            👤 <a href="${authorLink}" class="author-link">${product.authorName || 'Неизвестно'}</a>
+                        </p>
                         <div class="product-meta">
                             <span class="product-price">${product.price} ₽</span>
                             <span class="product-school">🏫 ${product.school}</span>

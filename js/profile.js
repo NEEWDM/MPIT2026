@@ -46,7 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     school: document.getElementById('reg-school').value,
                     email: document.getElementById('reg-email').value,
                     password: document.getElementById('reg-pass').value,
-                    skills: document.getElementById('reg-skills').value
+                    skills: document.getElementById('reg-skills').value,
+                    contacts: {
+                        email: document.getElementById('reg-email-contact').value,
+                        phone: document.getElementById('reg-phone').value,
+                        telegram: document.getElementById('reg-telegram').value
+                    }
                 })
             });
 

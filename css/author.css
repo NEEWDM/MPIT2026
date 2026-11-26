@@ -1,0 +1,186 @@
+/* === СТРАНИЦА ПУБЛИЧНОГО ПРОФИЛЯ АВТОРА === */
+
+.loading-state, .error-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: var(--color-light-gray);
+    border-radius: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.loading-state p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.error-state h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--color-text);
+}
+
+.error-state p {
+    color: #888;
+    margin-bottom: 25px;
+}
+
+/* Шапка профиля */
+.author-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+    padding: 40px;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 30px;
+}
+
+.author-avatar {
+    width: 120px;
+    height: 120px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 5px 20px rgba(0, 85, 255, 0.2);
+}
+
+.author-info h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: var(--color-text);
+}
+
+.author-school {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.author-skills span {
+    display: inline-block;
+    background: rgba(0, 85, 255, 0.1);
+    color: var(--color-accent);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* Контакты */
+.author-contacts {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 30px;
+}
+
+.author-contacts h3 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: var(--color-text);
+}
+
+.contacts-list {
+    display: grid;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--color-light-gray);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.contact-item:hover {
+    background: #f0f4ff;
+    transform: translateX(5px);
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.contact-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 3px;
+}
+
+.contact-value {
+    color: var(--color-text);
+    font-size: 1rem;
+}
+
+.contact-value a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.contact-value a:hover {
+    text-decoration: underline;
+}
+
+.no-contacts {
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+    background: var(--color-light-gray);
+    border-radius: 10px;
+}
+
+/* Работы автора */
+.author-works {
+    margin-top: 40px;
+}
+
+.author-works h3 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: var(--color-text);
+}
+
+.no-products {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-light-gray);
+    border-radius: 16px;
+    color: #888;
+    font-style: italic;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .author-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .author-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+    }
+    
+    .author-info h1 {
+        font-size: 1.8rem;
+    }
+}

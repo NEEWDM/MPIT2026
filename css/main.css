@@ -214,3 +214,21 @@ ul { list-style: none; }
 .hidden {
     display: none !important;
 }
+/* === ССЫЛКА НА АВТОРА === */
+.product-author {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.author-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.author-link:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль автора | FS "Тускул"</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/author.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo-area">
+                <img src="images/logo/logo.png" alt="Логотип Тускул" class="logo-img">
+                <div class="logo-text">
+                    <h1>FS "Тускул"</h1>
+                    <span>From School to School</span>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="upload.html">Продать модель</a></li>
+                    <li><a href="about.html">О проекте</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-actions">
+                <a href="profile.html" class="btn btn-outline">Профиль</a>
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section-padding">
+        
+        <!-- Загрузчик -->
+        <div id="author-loading" class="loading-state">
+            <p>Загрузка профиля...</p>
+        </div>
+
+        <!-- Ошибка -->
+        <div id="author-error" class="error-state hidden">
+            <h3>😕 Профиль не найден</h3>
+            <p>Возможно, автор удалил свой аккаунт или ссылка неверна</p>
+            <a href="catalog.html" class="btn btn-primary">Вернуться в каталог</a>
+        </div>
+
+        <!-- Профиль автора -->
+        <div id="author-profile" class="author-profile hidden">
+            
+            <!-- Шапка профиля -->
+            <div class="author-header">
+                <div class="author-avatar">
+                    <span id="author-avatar-letter">👤</span>
+                </div>
+                <div class="author-info">
+                    <h1 id="author-name">Имя автора</h1>
+                    <p class="author-school" id="author-school">🏫 Школа / Учреждение</p>
+                    <div class="author-skills" id="author-skills">
+                        <!-- Навыки добавятся через JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Контакты -->
+            <div class="author-contacts">
+                <h3>📞 Контакты</h3>
+                <div id="author-contacts-list" class="contacts-list">
+                    <!-- Контакты добавятся через JS -->
+                </div>
+            </div>
+
+            <!-- Работы автора -->
+            <div class="author-works">
+                <h3>🎨 Работы автора</h3>
+                <div id="author-products-grid" class="products-grid">
+                    <!-- Карточки товаров добавятся через JS -->
+                </div>
+                <div id="no-products" class="no-products hidden">
+                    <p>У автора пока нет опубликованных работ</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container copyright">&copy; 2026 FS "Тускул". Моя Профессия ИТ.</div>
+    </footer>
+
+    <script src="js/author.js"></script>
+</body>
+</html>
