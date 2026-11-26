@@ -1,7 +1,6 @@
 /**
  * profile.js
- * Управление авторизацией, регистрацией и личным кабинетом.
- * Работает с MongoDB через Vercel API (/api/auth и /api/products).
+ * Управление авторизацией, регистрацией, личным кабинетом и контактами.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,10 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const forms = document.querySelectorAll('.auth-form');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // === ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ (из localStorage) ===
+    // === ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ ===
     let currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
 
-    // === ПЕРЕКЛЮЧЕНИЕ ТАБОВ (Вход / Регистрация) ===
+    // === ПЕРЕКЛЮЧЕНИЕ ТАБОВ ===
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // === ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ ===
+    // === ПРОВЕРКА СЕССИИ ===
     if (currentUser) {
         showDashboard(currentUser);
     }
@@ -119,16 +118,43 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('dash-school').textContent = `🏫 ${user.school}`;
         document.getElementById('dash-skills').innerHTML = `<span>${user.skills}</span>`;
 
-                if (user.contacts) {
-            displayContactsInProfile(user.contacts);
-        }
-        
-        // Загружаем и отображаем товары пользователя
+        // Отображаем контакты
+        displayContactsInProfile(user.contacts);
+
+        // Загружаем товары
         renderMyProducts();
-        
     }
 
-    // === ЗАГРУЗКА И РЕНДЕР МОИХ ТОВАРОВ ИЗ БД ===
+    // === ОТОБРАЖЕНИЕ КОНТАКТОВ В ПРОФИЛЕ ===
+    function displayContactsInProfile(contacts) {
+        const contactsContainer = document.getElementById('dash-contacts');
+        
+        if (!contactsContainer) return;
+
+        if (!contacts || Object.keys(contacts).length === 0) {
+            contactsContainer.innerHTML = '<p style="color:#999; font-size:0.9rem; margin-top:10px;">Контакты не указаны</p>';
+            return;
+        }
+
+        let contactsHTML = '<h4 style="margin-top:15px; margin-bottom:10px; font-size:0.95rem; color:#666;">📞 Контакты</h4>';
+        
+        if (contacts.email) {
+            contactsHTML += `<div style="margin-bottom:8px; font-size:0.9rem;">📧 <a href="mailto:${contacts.email}" style="color:var(--color-accent); text-decoration:none;">${contacts.email}</a></div>`;
+        }
+        if (contacts.phone) {
+            contactsHTML += `<div style="margin-bottom:8px; font-size:0.9rem;">📱 <a href="tel:${contacts.phone}" style="color:var(--color-accent); text-decoration:none;">${contacts.phone}</a></div>`;
+        }
+        if (contacts.telegram) {
+            contactsHTML += `<div style="margin-bottom:8px; font-size:0.9rem;">✈️ <a href="https://t.me/${contacts.telegram.replace('@', '')}" target="_blank" style="color:var(--color-accent); text-decoration:none;">${contacts.telegram}</a></div>`;
+        }
+        if (contacts.vk) {
+            contactsHTML += `<div style="margin-bottom:8px; font-size:0.9rem;">🔵 <a href="${contacts.vk}" target="_blank" style="color:var(--color-accent); text-decoration:none;">Профиль VK</a></div>`;
+        }
+
+        contactsContainer.innerHTML = contactsHTML;
+    }
+
+    // === ЗАГРУЗКА И РЕНДЕР МОИХ ТОВАРОВ ===
     async function renderMyProducts() {
         const grid = document.getElementById('my-products-grid');
         
@@ -144,6 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const myProducts = await response.json();
 
             grid.innerHTML = '';
+
+            // Обновляем счётчик товаров
+            document.getElementById('stat-products').textContent = myProducts.length || 0;
 
             if (!myProducts || myProducts.length === 0) {
                 grid.innerHTML = '<div class="empty-state">У вас пока нет загруженных работ. <a href="upload.html" style="color: var(--color-accent);">Начните продавать свои умения!</a></div>';
@@ -173,20 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ: НАЗВАНИЯ КАТЕГОРИЙ ===
-    function getCategoryName(code) {
-        const names = {
-            '3d_print': '3D Печать',
-            'robotics': 'Робототехника',
-            'woodwork': 'Дерево',
-            'metalwork': 'Металл',
-            'souvenirs': 'Сувениры',
-            'digital': 'Цифровой проект',
-            'crafts': 'Поделки'
-        };
-        return names[code] || code;
-    }
-        // === РЕДАКТИРОВАНИЕ КОНТАКТОВ ===
+    // === РЕДАКТИРОВАНИЕ КОНТАКТОВ ===
     const editContactsBtn = document.getElementById('edit-contacts-btn');
     const contactsModal = document.getElementById('contacts-modal');
     const closeModalBtn = document.getElementById('close-modal');
@@ -197,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Открыть модальное окно
     if (editContactsBtn) {
         editContactsBtn.addEventListener('click', () => {
-            // Заполняем форму текущими контактами
             if (currentUser && currentUser.contacts) {
                 document.getElementById('edit-email').value = currentUser.contacts.email || '';
                 document.getElementById('edit-phone').value = currentUser.contacts.phone || '';
@@ -225,7 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelEditBtn.addEventListener('click', closeModal);
     }
 
-    // Закрытие по клику вне модального окна
     if (contactsModal) {
         contactsModal.addEventListener('click', (e) => {
             if (e.target === contactsModal) {
@@ -234,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Отправка формы
+    // Отправка формы контактов
     if (contactsForm) {
         contactsForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -269,16 +283,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Обновляем currentUser в localStorage
                     currentUser.contacts = newContacts;
                     localStorage.setItem('tuscul_user', JSON.stringify(currentUser));
                     
                     showContactsMessage('✓ Контакты обновлены', 'success');
-                    
-                    // Обновляем отображение контактов в профиле
                     displayContactsInProfile(newContacts);
                     
-                    // Закрываем модалку через 1.5 секунды
                     setTimeout(closeModal, 1500);
                 } else {
                     throw new Error(data.error || 'Ошибка при сохранении');
@@ -290,49 +300,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Отображение контактов в профиле
-    function displayContactsInProfile(contacts) {
-        let contactsContainer = document.querySelector('.user-contacts');
-        
-        if (!contactsContainer) {
-            // Создаём контейнер, если его нет
-            contactsContainer = document.createElement('div');
-            contactsContainer.className = 'user-contacts';
-            document.querySelector('.user-info').appendChild(contactsContainer);
-        }
-
-        if (!contacts || Object.keys(contacts).length === 0) {
-            contactsContainer.innerHTML = '<h4>📞 Контакты</h4><p style="color:#999; font-size:0.9rem;">Не указаны</p>';
-            return;
-        }
-
-        let contactsHTML = '<h4>📞 Контакты</h4>';
-        
-        if (contacts.email) {
-            contactsHTML += `<div class="contact-item-small">📧 <a href="mailto:${contacts.email}">${contacts.email}</a></div>`;
-        }
-        if (contacts.phone) {
-            contactsHTML += `<div class="contact-item-small">📱 <a href="tel:${contacts.phone}">${contacts.phone}</a></div>`;
-        }
-        if (contacts.telegram) {
-            contactsHTML += `<div class="contact-item-small">✈️ <a href="https://t.me/${contacts.telegram.replace('@', '')}" target="_blank">${contacts.telegram}</a></div>`;
-        }
-        if (contacts.vk) {
-            contactsHTML += `<div class="contact-item-small">🔵 <a href="${contacts.vk}" target="_blank">Профиль VK</a></div>`;
-        }
-
-        contactsContainer.innerHTML = contactsHTML;
-    }
-
-    // Сообщение в модальном окне
     function showContactsMessage(text, type) {
         contactsMessage.textContent = text;
         contactsMessage.className = 'form-message ' + type;
         contactsMessage.classList.remove('hidden');
     }
 
-    // Загружаем контакты при открытии профиля
-    if (currentUser && currentUser.contacts) {
-        displayContactsInProfile(currentUser.contacts);
+    // === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ===
+    function getCategoryName(code) {
+        const names = {
+            '3d_print': '3D Печать',
+            'robotics': 'Робототехника',
+            'woodwork': 'Дерево',
+            'metalwork': 'Металл',
+            'souvenirs': 'Сувениры',
+            'digital': 'Цифровой проект',
+            'crafts': 'Поделки'
+        };
+        return names[code] || code;
     }
 });

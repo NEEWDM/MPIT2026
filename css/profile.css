@@ -1,4 +1,4 @@
-/* === AUTHORIZATION === */
+/* === АВТОРИЗАЦИЯ === */
 .auth-container {
     max-width: 500px;
     margin: 40px auto;
@@ -34,7 +34,7 @@
 .tab-btn.active {
     color: var(--color-accent);
     border-bottom: 3px solid var(--color-accent);
-    margin-bottom: -2px; /* Перекрытие линии */
+    margin-bottom: -2px;
 }
 
 .auth-form { display: none; animation: fadeIn 0.4s ease; }
@@ -70,7 +70,7 @@
 
 .full-width { width: 100%; margin-top: 10px; }
 
-/* === DASHBOARD === */
+/* === ДАШБОРД === */
 .hidden { display: none !important; }
 
 .profile-header {
@@ -149,18 +149,7 @@
     font-style: italic;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ADAPTIVE */
-@media (max-width: 768px) {
-    .profile-header { flex-direction: column; text-align: center; }
-    .stats-grid { grid-template-columns: 1fr; }
-    .form-row { flex-direction: column; gap: 0; }
-}
-/* === МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ КОНТАКТОВ === */
+/* === МОДАЛЬНОЕ ОКНО === */
 .modal {
     position: fixed;
     top: 0;
@@ -224,33 +213,33 @@
     flex: 1;
 }
 
-/* Отображение контактов в профиле */
-.user-contacts {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--color-border);
-}
-
-.user-contacts h4 {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 10px;
+.form-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
     font-weight: 600;
 }
 
-.contact-item-small {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+.form-message.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
 }
 
-.contact-item-small a {
-    color: var(--color-accent);
-    text-decoration: none;
+.form-message.error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
 }
 
-.contact-item-small a:hover {
-    text-decoration: underline;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .profile-header { flex-direction: column; text-align: center; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; gap: 0; }
 }
