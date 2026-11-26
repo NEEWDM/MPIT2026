@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="product-price">${product.price} ₽</span>
                             <span class="product-school">🏫 ${product.school}</span>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="addToCart('${product._id}')">
-                            В корзину
+                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="openOrderModal('${product._id}', '${product.title}', ${product.price})">
+                            Купить
                         </button>
                     </div>
                 </article>

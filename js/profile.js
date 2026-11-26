@@ -345,4 +345,73 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
+        // === ЗАГРУЗКА МОИХ ЗАКАЗОВ ===
+    async function renderMyOrders() {
+        const ordersGrid = document.getElementById('my-orders-grid');
+        
+        if (!ordersGrid) return;
+        
+        if (!currentUser || !currentUser.id) {
+            ordersGrid.innerHTML = '<div class="orders-empty">Пользователь не авторизован</div>';
+            return;
+        }
+
+        ordersGrid.innerHTML = '<p>Загрузка заказов...</p>';
+
+        try {
+            const response = await fetch('/api/orders?userId=' + currentUser.id);
+            const myOrders = await response.json();
+
+            ordersGrid.innerHTML = '';
+
+            if (!myOrders || myOrders.length === 0) {
+                ordersGrid.innerHTML = '<div class="orders-empty">У вас пока нет заказов</div>';
+                return;
+            }
+
+            myOrders.forEach(order => {
+                const statusLabels = {
+                    'pending': '<span class="order-status-badge order-status-pending">⏳ На рассмотрении...</span>',
+                    'approved': '<span class="order-status-badge order-status-approved">✅ Принят</span>',
+                    'rejected': '<span class="order-status-badge order-status-rejected">❌ Отклонён</span>'
+                };
+
+                const commentHTML = order.comment ? `<div class="order-card-comment">💬 ${order.comment}</div>` : '';
+
+                const orderHTML = `
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <div>
+                                <div class="order-card-title">Заказ #${order._id.slice(-6)}</div>
+                                <div class="order-card-date">${new Date(order.createdAt).toLocaleDateString('ru-RU')}</div>
+                            </div>
+                            ${statusLabels[order.status] || ''}
+                        </div>
+                        <div class="order-card-details">
+                            <div class="order-detail-item">
+                                <span class="order-detail-label">Контакт</span>
+                                <span class="order-detail-value">${order.contact}</span>
+                            </div>
+                            <div class="order-detail-item">
+                                <span class="order-detail-label">Количество</span>
+                                <span class="order-detail-value">${order.quantity} шт.</span>
+                            </div>
+                        </div>
+                        ${commentHTML}
+                    </div>
+                `;
+                ordersGrid.insertAdjacentHTML('beforeend', orderHTML);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки заказов:', error);
+            ordersGrid.innerHTML = '<div class="orders-empty">Не удалось загрузить заказы</div>';
+        }
+    }
+
+    // Вызываем загрузку заказов при показе дашборда
+    const originalShowDashboard = showDashboard;
+    showDashboard = function(user) {
+        originalShowDashboard(user);
+        renderMyOrders();
+    };
 });

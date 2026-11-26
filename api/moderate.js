@@ -27,8 +27,22 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Не все параметры переданы' });
     }
 
-    if (!['approve', 'reject'].includes(action)) {
+    if (!['approve', 'reject', 'delete'].includes(action)) {
         return res.status(400).json({ error: 'Неверное действие' });
+    }
+
+    // Обработка удаления
+    if (action === 'delete') {
+        const result = await products.deleteOne({ _id: new ObjectId(productId) });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Проект не найден' });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Проект удалён'
+        });
     }
 
     let clientConn;

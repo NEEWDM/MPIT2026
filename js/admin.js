@@ -103,8 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonsHTML = app.status === 'pending' ? `
             <button class="btn-approve" data-id="${app._id}" data-action="approve">✅ Одобрить</button>
             <button class="btn-reject" data-id="${app._id}" data-action="reject">❌ Отклонить</button>
+            <button class="btn-delete" data-id="${app._id}" data-action="delete" style="background:#6c757d; color:white; border:none; padding:10px 15px; border-radius:6px; font-family:var(--font-main); font-weight:600; cursor:pointer; margin-top:5px;">🗑️ Удалить</button>
         ` : `
-            <button class="btn-approve" disabled>Уже обработано</button>
+            <button class="btn-approve" disabled style="opacity:0.5; cursor:not-allowed;">Уже обработано</button>
+            <button class="btn-delete" data-id="${app._id}" data-action="delete" style="background:#6c757d; color:white; border:none; padding:10px 15px; border-radius:6px; font-family:var(--font-main); font-weight:600; cursor:pointer; margin-top:5px;">🗑️ Удалить</button>
         `;
 
         return `
@@ -132,16 +134,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function attachActionHandlers() {
-        document.querySelectorAll('.btn-approve, .btn-reject').forEach(btn => {
+        document.querySelectorAll('.btn-approve, .btn-reject, .btn-delete').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const productId = e.target.dataset.id;
                 const action = e.target.dataset.action;
 
-                if (!confirm(`Вы уверены, что хотите ${action === 'approve' ? 'одобрить' : 'отклонить'} этот проект?`)) {
+                // Определяем действие
+                let confirmMessage = '';
+                if (action === 'approve') {
+                    confirmMessage = 'Вы уверены, что хотите одобрить этот проект?';
+                } else if (action === 'reject') {
+                    confirmMessage = 'Вы уверены, что хотите отклонить этот проект?';
+                } else if (action === 'delete') {
+                    confirmMessage = 'Вы уверены, что хотите УДАЛИТЬ этот проект? Это действие нельзя отменить!';
+                }
+
+                if (!confirm(confirmMessage)) {
                     return;
                 }
 
                 e.target.disabled = true;
+                const originalText = e.target.textContent;
                 e.target.textContent = 'Обработка...';
 
                 try {
@@ -158,14 +171,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
 
                     if (response.ok) {
-                        // Обновляем локально
-                        const app = allApplications.find(a => a._id === productId);
-                        if (app) {
-                            app.status = data.newStatus;
+                        if (action === 'delete') {
+                            // Удаляем из локального массива
+                            allApplications = allApplications.filter(a => a._id !== productId);
+                            renderApplications();
+                        } else {
+                            // Обновляем статус
+                            const app = allApplications.find(a => a._id === productId);
+                            if (app) {
+                                app.status = data.newStatus;
+                            }
+                            await loadApplications();
                         }
-                        
-                        // Перезагружаем статистику и список
-                        await loadApplications();
                         
                         alert(data.message);
                     } else {
@@ -175,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Moderation error:', error);
                     alert('Ошибка: ' + error.message);
                     e.target.disabled = false;
-                    e.target.textContent = action === 'approve' ? '✅ Одобрить' : '❌ Отклонить';
+                    e.target.textContent = originalText;
                 }
             });
         });
@@ -203,4 +220,126 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
+        // === ЗАГРУЗКА ЗАКАЗОВ ===
+    let allOrders = [];
+    let currentOrderFilter = 'pending';
+
+    async function loadOrders() {
+        try {
+            const response = await fetch('/api/orders?isAdmin=true');
+            allOrders = await response.json();
+            
+            renderOrders();
+        } catch (error) {
+            console.error('Ошибка загрузки заказов:', error);
+        }
+    }
+
+    function renderOrders() {
+        const ordersList = document.getElementById('orders-list');
+        const noOrders = document.getElementById('no-orders');
+        
+        if (!ordersList) return;
+
+        ordersList.innerHTML = '';
+
+        let filtered = allOrders;
+        if (currentOrderFilter !== 'all') {
+            filtered = allOrders.filter(order => order.status === currentOrderFilter);
+        }
+
+        if (filtered.length === 0) {
+            noOrders.classList.remove('hidden');
+            return;
+        }
+
+        noOrders.classList.add('hidden');
+
+        filtered.forEach(order => {
+            const statusLabels = {
+                'pending': '<span class="application-status status-pending">⏳ На рассмотрении</span>',
+                'approved': '<span class="application-status status-approved">✅ Принят</span>',
+                'rejected': '<span class="application-status status-rejected">❌ Отклонён</span>'
+            };
+
+            const commentHTML = order.comment ? `<p class="application-description">💬 ${order.comment}</p>` : '';
+
+            const buttonsHTML = order.status === 'pending' ? `
+                <button class="btn-approve" data-order-id="${order._id}" data-action="approve">✅ Принять</button>
+                <button class="btn-reject" data-order-id="${order._id}" data-action="reject">❌ Отклонить</button>
+            ` : `<button class="btn-approve" disabled>Обработано</button>`;
+
+            const orderHTML = `
+                <div class="application-card">
+                    <div class="application-info" style="grid-column: 1 / -1;">
+                        <h3>Заказ #${order._id.slice(-6)}</h3>
+                        <div class="application-meta">
+                            <span>👤 ${order.buyerName || 'Неизвестно'}</span>
+                            <span>📞 ${order.contact}</span>
+                            <span>📦 ${order.quantity} шт.</span>
+                            <span>📅 ${new Date(order.createdAt).toLocaleDateString('ru-RU')}</span>
+                        </div>
+                        ${commentHTML}
+                        ${statusLabels[order.status] || ''}
+                    </div>
+                    <div class="application-actions">
+                        ${buttonsHTML}
+                    </div>
+                </div>
+            `;
+            ordersList.insertAdjacentHTML('beforeend', orderHTML);
+        });
+
+        // Навешиваем обработчики
+        document.querySelectorAll('[data-order-id]').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const orderId = e.target.dataset.orderId;
+                const action = e.target.dataset.action;
+
+                if (!confirm(`Вы уверены, что хотите ${action === 'approve' ? 'принять' : 'отклонить'} этот заказ?`)) {
+                    return;
+                }
+
+                e.target.disabled = true;
+                e.target.textContent = 'Обработка...';
+
+                try {
+                    const response = await fetch('/api/orders', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            orderId,
+                            action,
+                            adminId: currentUser.id
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        await loadOrders();
+                        alert(data.message);
+                    } else {
+                        throw new Error(data.error);
+                    }
+                } catch (error) {
+                    alert('Ошибка: ' + error.message);
+                    e.target.disabled = false;
+                }
+            });
+        });
+    }
+
+    // Обработчики фильтров заказов
+    document.querySelectorAll('.order-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.order-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentOrderFilter = btn.dataset.filter;
+            renderOrders();
+        });
+    });
+
+    // Загружаем заказы при загрузке страницы
+    loadOrders();
 });

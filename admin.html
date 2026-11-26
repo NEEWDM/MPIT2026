@@ -78,6 +78,24 @@
             <div id="applications-list" class="applications-list">
                 <p class="loading-text">Загрузка заявок...</p>
             </div>
+            
+                        <!-- Раздел заказов -->
+            <div style="margin-top:60px;">
+                <h2 style="margin-bottom:20px;">📦 Заказы на покупку</h2>
+                
+                <div class="admin-filters">
+                    <button class="order-filter-btn active" data-filter="pending">⏳ Новые заказы</button>
+                    <button class="order-filter-btn" data-filter="all">📋 Все заказы</button>
+                </div>
+
+                <div id="orders-list" class="applications-list">
+                    <p class="loading-text">Загрузка заказов...</p>
+                </div>
+
+                <div id="no-orders" class="no-applications hidden">
+                    <p>Нет заказов для отображения</p>
+                </div>
+            </div>
 
             <div id="no-applications" class="no-applications hidden">
                 <p>Нет заявок для отображения</p>
