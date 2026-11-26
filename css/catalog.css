@@ -150,3 +150,59 @@
         align-items: stretch;
     }
 }
+
+/* === АДАПТИВНОСТЬ КАТАЛОГА === */
+@media (max-width: 900px) {
+    .catalog-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .filters-sidebar {
+        position: static;
+    }
+    
+    .filters-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.6rem;
+    }
+    
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .results-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .sort-select {
+        width: 100%;
+    }
+    
+    .filter-actions {
+        flex-direction: column;
+    }
+    
+    .price-range {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .filters-card {
+        padding: 15px;
+    }
+    
+    .filter-group input,
+    .filter-group select {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}

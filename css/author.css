@@ -184,3 +184,60 @@
         font-size: 1.8rem;
     }
 }
+
+/* === АДАПТИВНОСТЬ ПРОФИЛЯ АВТОРА === */
+@media (max-width: 768px) {
+    .author-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .author-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+    }
+    
+    .author-info h1 {
+        font-size: 1.6rem;
+    }
+    
+    .author-school {
+        font-size: 1rem;
+    }
+    
+    .author-contacts {
+        padding: 20px;
+    }
+    
+    .author-contacts h3 {
+        font-size: 1.2rem;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    
+    .author-works h3 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .author-header {
+        padding: 20px 15px;
+    }
+    
+    .author-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+    }
+    
+    .author-info h1 {
+        font-size: 1.3rem;
+    }
+}

@@ -325,3 +325,71 @@
         min-width: 120px;
     }
 }
+
+/* === АДАПТИВНОСТЬ АДМИНКИ === */
+@media (max-width: 900px) {
+    .application-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .application-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .application-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .application-actions button {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-title {
+        font-size: 1.8rem;
+    }
+    
+    .admin-subtitle {
+        font-size: 1rem;
+    }
+    
+    .admin-filters {
+        flex-direction: column;
+    }
+    
+    .filter-btn,
+    .order-filter-btn {
+        width: 100%;
+    }
+    
+    .application-card {
+        padding: 20px 15px;
+    }
+    
+    .application-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    .application-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .application-actions {
+        flex-direction: column;
+    }
+    
+    .application-actions button {
+        width: 100%;
+    }
+}

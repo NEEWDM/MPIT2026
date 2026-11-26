@@ -17,20 +17,25 @@
                 <img src="images/logo/logo.png" alt="Logo" class="logo-img">
                 <div class="logo-text">
                     <h1>FS "Тускул"</h1>
-                    <span>From School - Тускул!</span>
+                    <span>From School to School</span>
                 </div>
             </a>
-            <nav class="main-nav">
+            <div class="user-actions">
+                <a href="profile.html" class="btn btn-outline">Профиль</a>
+                <button class="burger-menu" id="burger-menu" aria-label="Меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <nav class="main-nav" id="main-nav">
                 <ul>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="catalog.html">Каталог</a></li>
-                    <li><a href="upload.html">Загрузить проект</a></li>
+                    <li><a href="upload.html">Продать модель</a></li>
                     <li><a href="about.html">О проекте</a></li>
                 </ul>
             </nav>
-            <div class="user-actions">
-                <a href="profile.html" class="btn btn-outline">Профиль</a>
-            </div>
         </div>
     </header>
 
@@ -214,5 +219,18 @@
     </footer>
 
     <script src="js/profile.js"></script>
+
+        <script>
+        // Бургер-меню
+        const burgerMenu = document.getElementById('burger-menu');
+        const mainNav = document.getElementById('main-nav');
+        
+        if (burgerMenu && mainNav) {
+            burgerMenu.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+        }
+    </script>
+    
 </body>
 </html>

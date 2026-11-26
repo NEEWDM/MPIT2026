@@ -237,3 +237,49 @@
     .form-actions { flex-direction: column; }
     .file-upload-area { height: 200px; }
 }
+
+/* === АДАПТИВНОСТЬ ЗАГРУЗКИ === */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.6rem;
+    }
+    
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .upload-form {
+        padding: 25px 20px;
+    }
+    
+    .file-upload-area {
+        height: 200px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-form {
+        padding: 20px 15px;
+    }
+    
+    .file-upload-area {
+        height: 180px;
+    }
+    
+    .upload-icon {
+        font-size: 2.5rem;
+    }
+}

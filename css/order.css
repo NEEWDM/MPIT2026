@@ -207,3 +207,43 @@
         flex-direction: column;
     }
 }
+
+/* === АДАПТИВНОСТЬ МОДАЛЬНОГО ОКНА ПОКУПКИ === */
+@media (max-width: 600px) {
+    .order-modal-content {
+        padding: 25px 20px;
+        max-width: 95%;
+    }
+    
+    .order-modal-header h3 {
+        font-size: 1.4rem;
+    }
+    
+    .order-product-info {
+        padding: 15px;
+    }
+    
+    .order-product-info h4 {
+        font-size: 1rem;
+    }
+    
+    .order-product-info .price {
+        font-size: 1.2rem;
+    }
+    
+    .order-total {
+        padding: 12px 15px;
+    }
+    
+    .order-total-price {
+        font-size: 1.3rem;
+    }
+    
+    .order-actions {
+        flex-direction: column;
+    }
+    
+    .order-actions .btn {
+        width: 100%;
+    }
+}
