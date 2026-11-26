@@ -1,71 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Типо база данных
-    const productsDB = [
-        {
-            id: 1,
-            title: "Портрет Путина на дереве",
-            category: "Дерево",
-            price: 200,
-            school: "НБСОШ2",
-            image: "images/products/picture1.jpg" 
-        },
-        {
-            id: 2,
-            title: "Шестерня для насоса",
-            category: "3D Печать",
-            price: 350,
-            school: "IT-Cube",
-            image: "images/products/picture2.jpg"
-        },
-        {
-            id: 3,
-            title: "Чороон(жоский)",
-            category: "Сувениры",
-            price: 1500,
-            school: "Кружок 'Чороонология'",
-            image: "images/products/picture3.jpg"
-        },
-        {
-            id: 4,
-            title: "Брелок с логотипом школы",
-            category: "Сувениры",
-            price: 150,
-            school: "СОШ имени Сорокина И.Н.",
-            image: "images/products/picture4.jpg"
-        },
-        {
-            id: 5,
-            title: "Фигурка 'Крипер'",
-            category: "3D Печать",
-            price: 450,
-            school: "Секция Анонимных Печатистов",
-            image: "images/products/picture5.jpg"
-        },
-        {
-            id: 6,
-            title: "Сайт FS 'Тускул'",
-            category: "Цифровой проект",
-            price: 15,
-            school: "IT-Cube",
-            image: "images/products/picture6.jpg"
-        },
-    ];
+        // --- 1. ЗАГРУЗКА ТОВАРОВ ИЗ MONGODB ЧЕРЕЗ VERCEL API ---
+    async function loadProducts() {
+        try {
+            const response = await fetch('/api/products');
+            const productsDB = await response.json();
+            
+            renderProducts(productsDB);
+        } catch (error) {
+            console.error('Ошибка загрузки товаров:', error);
+            document.getElementById('products-grid').innerHTML = 
+                '<p>Не удалось загрузить товары. Попробуйте позже.</p>';
+        }
+    }
+    
+    loadProducts();
 
     // рендер
-    function renderProducts(products) {
+        function renderProducts(products) {
         const gridContainer = document.getElementById('products-grid');
-        
-        // чтоб не наслаивалось
         gridContainer.innerHTML = '';
 
+        if (!products || products.length === 0) {
+            gridContainer.innerHTML = '<p>Товары пока не добавлены.</p>';
+            return;
+        }
+
         products.forEach(product => {
-            // структура карточки
             const cardHTML = `
                 <article class="product-card">
-                    <div class="card-image-wrapper">
-                        <img src="${product.image}" alt="${product.title}" class="product-image" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-                    </div>
+                    <img src="${product.image}" alt="${product.title}" class="product-image" 
+                         onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                     <div class="product-info">
                         <div class="product-category">${product.category}</div>
                         <h3 class="product-title">${product.title}</h3>
@@ -73,14 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="product-price">${product.price} ₽</span>
                             <span class="product-school">🏫 ${product.school}</span>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="addToCart(${product.id})">
+                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" 
+                                onclick="addToCart(${product._id})">
                             В корзину
                         </button>
                     </div>
                 </article>
             `;
-            
-            // в сетку
             gridContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
     }
