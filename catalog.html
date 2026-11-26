@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог проектов | FS "Тускул"</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/catalog.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo-area">
+                <img src="images/logo/logo.png" alt="Логотип Тускул" class="logo-img">
+                <div class="logo-text">
+                    <h1>FS "Тускул"</h1>
+                    <span>From School to School</span>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html" class="active">Каталог</a></li>
+                    <li><a href="upload.html">Продать модель</a></li>
+                    <li><a href="about.html">О проекте</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-actions">
+                <a href="profile.html" class="btn btn-outline">Профиль</a>
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section-padding">
+        <h2 class="page-title">Каталог проектов</h2>
+        <p class="page-subtitle">Найдите уникальные работы школьников и центров технического творчества</p>
+
+        <div class="catalog-layout">
+            
+            <!-- Сайдбар с фильтрами -->
+            <aside class="filters-sidebar">
+                <div class="filters-card">
+                    <h3>Фильтры</h3>
+                    
+                    <form id="filters-form">
+                        <!-- Поиск по ключевым словам -->
+                        <div class="filter-group">
+                            <label for="filter-search">🔍 Поиск</label>
+                            <input type="text" id="filter-search" placeholder="Название, описание, теги...">
+                        </div>
+
+                        <!-- Категория -->
+                        <div class="filter-group">
+                            <label for="filter-category">📂 Категория</label>
+                            <select id="filter-category">
+                                <option value="">Все категории</option>
+                                <option value="3d_print">3D Печать</option>
+                                <option value="robotics">Робототехника</option>
+                                <option value="woodwork">Дерево</option>
+                                <option value="metalwork">Металл</option>
+                                <option value="souvenirs">Сувениры</option>
+                                <option value="digital">Цифровой проект</option>
+                                <option value="crafts">Поделки</option>
+                            </select>
+                        </div>
+
+                        <!-- Школа/учреждение -->
+                        <div class="filter-group">
+                            <label for="filter-school">🏫 Школа / Учреждение</label>
+                            <input type="text" id="filter-school" placeholder="Например: ЦДТТ">
+                        </div>
+
+                        <!-- Автор -->
+                        <div class="filter-group">
+                            <label for="filter-author">👤 Автор</label>
+                            <input type="text" id="filter-author" placeholder="Имя автора">
+                        </div>
+
+                        <!-- Диапазон цен -->
+                        <div class="filter-group">
+                            <label>💰 Цена (₽)</label>
+                            <div class="price-range">
+                                <input type="number" id="filter-price-min" placeholder="От" min="0">
+                                <input type="number" id="filter-price-max" placeholder="До" min="0">
+                            </div>
+                        </div>
+
+                        <!-- Кнопки -->
+                        <div class="filter-actions">
+                            <button type="submit" class="btn btn-primary full-width">Применить</button>
+                            <button type="button" id="reset-filters" class="btn btn-outline full-width">Сбросить</button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Результаты -->
+            <section class="catalog-results">
+                <div class="results-header">
+                    <span id="results-count">Загрузка...</span>
+                    <select id="sort-select" class="sort-select">
+                        <option value="newest">Сначала новые</option>
+                        <option value="price-asc">Цена: по возрастанию</option>
+                        <option value="price-desc">Цена: по убыванию</option>
+                    </select>
+                </div>
+
+                <div id="catalog-grid" class="products-grid">
+                    <p>Загрузка проектов...</p>
+                </div>
+
+                <div id="no-results" class="no-results hidden">
+                    <h3>😕 Ничего не найдено</h3>
+                    <p>Попробуйте изменить параметры поиска</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container copyright">&copy; 2026 FS "Тускул". Моя Профессия ИТ.</div>
+    </footer>
+
+    <script src="js/catalog.js"></script>
+</body>
+</html>

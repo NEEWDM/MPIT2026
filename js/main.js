@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
 
     // рендер
-        function renderProducts(products) {
+            function renderProducts(products) {
         const gridContainer = document.getElementById('products-grid');
         gridContainer.innerHTML = '';
 
@@ -26,7 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        products.forEach(product => {
+        // Ограничиваем до 6 проектов для главной страницы
+        const limitedProducts = products.slice(0, 6);
+
+        limitedProducts.forEach(product => {
             const cardHTML = `
                 <article class="product-card">
                     <img src="${product.image}" alt="${product.title}" class="product-image" 
