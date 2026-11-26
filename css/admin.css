@@ -21,9 +21,10 @@
 }
 
 .admin-title {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin-bottom: 10px;
     color: var(--color-text);
+    font-weight: 800;
 }
 
 .admin-subtitle {
@@ -36,16 +37,23 @@
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 25px;
     margin-bottom: 40px;
 }
 
 .admin-stats .stat-card {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
     text-align: center;
     border: 1px solid var(--color-border);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    transition: 0.3s;
+}
+
+.admin-stats .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 .admin-stats .stat-num {
@@ -53,11 +61,11 @@
     font-size: 2.5rem;
     font-weight: 800;
     color: var(--color-accent);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .admin-stats .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #777;
     font-weight: 500;
 }
@@ -65,31 +73,37 @@
 /* Фильтры */
 .admin-filters {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 30px;
     flex-wrap: wrap;
 }
 
-.filter-btn {
-    padding: 10px 20px;
+.filter-btn,
+.order-filter-btn {
+    padding: 12px 24px;
     background: white;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-border);
     border-radius: 8px;
     font-family: var(--font-main);
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 0.95rem;
 }
 
-.filter-btn:hover {
+.filter-btn:hover,
+.order-filter-btn:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
+    transform: translateY(-2px);
 }
 
-.filter-btn.active {
+.filter-btn.active,
+.order-filter-btn.active {
     background: var(--color-accent);
     color: white;
     border-color: var(--color-accent);
+    box-shadow: 0 5px 15px rgba(0, 85, 255, 0.3);
 }
 
 /* Список заявок */
@@ -102,119 +116,172 @@
     background: white;
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    padding: 25px;
+    padding: 30px;
     display: grid;
-    grid-template-columns: 200px 1fr auto;
-    gap: 25px;
+    grid-template-columns: 220px 1fr auto;
+    gap: 30px;
     align-items: start;
     transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
 }
 
 .application-card:hover {
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-color: var(--color-accent);
 }
 
 .application-image {
-    width: 200px;
-    height: 150px;
+    width: 220px;
+    height: 160px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
     background: var(--color-light-gray);
+    border: 1px solid var(--color-border);
 }
 
 .application-info h3 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
     color: var(--color-text);
+    font-weight: 700;
 }
 
 .application-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    margin-bottom: 12px;
-    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
     color: #666;
 }
 
 .application-meta span {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 .application-description {
     color: #555;
     line-height: 1.6;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .application-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 15px;
 }
 
 .tag {
     background: var(--color-light-gray);
-    padding: 3px 10px;
+    padding: 5px 12px;
     border-radius: 12px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #666;
+    border: 1px solid var(--color-border);
 }
 
 .application-status {
     display: inline-block;
-    padding: 4px 10px;
+    padding: 6px 14px;
     border-radius: 12px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
+}
+
+.application-status.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.application-status.status-approved {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #a5d6a7;
+}
+
+.application-status.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #ef9a9a;
 }
 
 .application-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    min-width: 140px;
+    gap: 12px;
+    min-width: 160px;
 }
 
 .btn-approve {
-    background: #28a745;
+    background: var(--color-accent);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-family: var(--font-main);
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 10px rgba(0, 85, 255, 0.3);
 }
 
-.btn-approve:hover {
-    background: #218838;
+.btn-approve:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 85, 255, 0.4);
 }
 
 .btn-reject {
     background: #dc3545;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-family: var(--font-main);
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
 }
 
-.btn-reject:hover {
+.btn-reject:hover:not(:disabled) {
     background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+}
+
+.btn-delete {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: var(--font-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);
+}
+
+.btn-delete:hover:not(:disabled) {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
 }
 
 .btn-approve:disabled,
-.btn-reject:disabled {
+.btn-reject:disabled,
+.btn-delete:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 .no-applications {
@@ -223,12 +290,14 @@
     background: var(--color-light-gray);
     border-radius: 12px;
     color: #888;
+    font-size: 1.1rem;
 }
 
 .loading-text {
     text-align: center;
     padding: 40px;
     color: #666;
+    font-size: 1.1rem;
 }
 
 /* Адаптив */
@@ -244,5 +313,15 @@
     
     .admin-stats {
         grid-template-columns: 1fr;
+    }
+    
+    .application-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .application-actions button {
+        flex: 1;
+        min-width: 120px;
     }
 }

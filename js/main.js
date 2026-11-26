@@ -1,6 +1,12 @@
+/**
+ * main.js
+ * Основной скрипт для главной страницы FS "Тускул".
+ * Загружает товары из MongoDB через Vercel API.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
     
-        // --- 1. ЗАГРУЗКА ТОВАРОВ ИЗ MONGODB ЧЕРЕЗ VERCEL API ---
+    // === ЗАГРУЗКА ТОВАРОВ ИЗ MONGODB ЧЕРЕЗ VERCEL API ===
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
@@ -16,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadProducts();
 
-    // рендер
-            function renderProducts(products) {
+    // === ФУНКЦИЯ ОТРИСОВКИ ТОВАРОВ ===
+    function renderProducts(products) {
         const gridContainer = document.getElementById('products-grid');
         gridContainer.innerHTML = '';
 
@@ -46,8 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="product-price">${product.price} ₽</span>
                             <span class="product-school">🏫 ${product.school}</span>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" 
-                                onclick="openOrderModal('${product._id}', '${product.title}', ${product.price})">
+                        <button class="btn btn-primary buy-button" 
+                                data-id="${product._id}" 
+                                data-title="${product.title}" 
+                                data-price="${product.price}"
+                                style="width:100%; margin-top:15px;">
                             Купить
                         </button>
                     </div>
@@ -55,18 +64,28 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             gridContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
+
+        // Навешиваем обработчики на кнопки "Купить"
+        document.querySelectorAll('.buy-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const title = e.target.dataset.title;
+                const price = parseInt(e.target.dataset.price);
+                
+                if (typeof openOrderModal === 'function') {
+                    openOrderModal(id, title, price);
+                } else {
+                    alert('Ошибка: функция покупки не загружена');
+                }
+            });
+        });
     }
 
-    // тут типо в корзину добавляем, но нет
+    // === ФУНКЦИЯ ДОБАВЛЕНИЯ В КОРЗИНУ (заглушка) ===
     window.addToCart = function(id) {
         const cartCount = document.getElementById('cart-count');
         let currentCount = parseInt(cartCount.innerText);
         cartCount.innerText = currentCount + 1;
-        
-        // смешная вылезалка
-        alert(`Товар с ID ${id} добавлен в корзину`)
+        alert(`Товар ID ${id} добавлен в корзину!`);
     };
-
-    // рендер вызываем
-    renderProducts(productsDB);
 });
