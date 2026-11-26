@@ -1,8 +1,8 @@
 /**
  * upload.js
  * Логика страницы загрузки проекта.
- * Проверяет авторизацию, загружает фото в Cloudinary,
- * сохраняет данные проекта в MongoDB через API.
+ * Проверяет авторизацию, загружает фото через серверный API,
+ * сохраняет данные проекта в MongoDB.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submit-btn');
     const formMessage = document.getElementById('form-message');
 
-    // Проверяем авторизацию
+    // === ПРОВЕРКА АВТОРИЗАЦИИ ===
     const currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
 
     if (!currentUser) {
-        // Пользователь не авторизован — показываем сообщение
+        // Не авторизован — показываем только блок авторизации
         authRequiredSection.classList.remove('hidden');
         uploadSection.classList.add('hidden');
     } else {
-        // Пользователь авторизован — показываем форму
+        // Авторизован — показываем форму
         authRequiredSection.classList.add('hidden');
         uploadSection.classList.remove('hidden');
         
@@ -36,8 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- ЗАГРУЗКА ФОТО ---
-    
+    // === ЗАГРУЗКА ФОТО ===
+    let uploadedImageUrl = null;
+
     // Клик по области — открывает выбор файла
     uploadArea.addEventListener('click', () => fileInput.click());
 
@@ -66,8 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    let uploadedImageUrl = null; // URL загруженного фото в Cloudinary
-
     function handleFile(file) {
         // Проверка типа файла
         if (!file.type.startsWith('image/')) {
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Показываем превью
+        // Показываем превью сразу (до загрузки на сервер)
         const reader = new FileReader();
         reader.onload = (e) => {
             imagePreview.src = e.target.result;
@@ -90,48 +89,59 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         reader.readAsDataURL(file);
 
-        // Загружаем в Cloudinary
-        uploadToCloudinary(file);
+        // Загружаем через серверный API
+        uploadToServer(file);
     }
 
-    async function uploadToCloudinary(file) {
+    async function uploadToServer(file) {
         uploadProgress.classList.remove('hidden');
         submitBtn.disabled = true;
+        showMessage('Загрузка фото...', 'success');
 
         try {
-            // Получаем upload preset из переменных окружения Vercel
-            // Для unsigned upload preset нужно настроить в Cloudinary Dashboard
-            const uploadPreset = 'tuscul_uploads'; // Создай в Cloudinary
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', uploadPreset);
-            formData.append('folder', 'tuscul_products');
+            // Читаем файл как base64
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const base64File = reader.result; // data:image/jpeg;base64,...
 
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME || 'tuscul'}/image/upload`, {
-                method: 'POST',
-                body: formData
-            });
+                try {
+                    const response = await fetch('/api/upload-image', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            file: base64File,
+                            fileName: file.name
+                        })
+                    });
 
-            const data = await response.json();
+                    const data = await response.json();
 
-            if (data.secure_url) {
-                uploadedImageUrl = data.secure_url;
-                showMessage('Фото загружено ✓', 'success');
-            } else {
-                throw new Error('Не удалось загрузить фото');
-            }
+                    if (response.ok && data.url) {
+                        uploadedImageUrl = data.url;
+                        showMessage('✓ Фото загружено', 'success');
+                    } else {
+                        throw new Error(data.error || 'Неизвестная ошибка');
+                    }
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    showMessage('Ошибка загрузки: ' + err.message, 'error');
+                    uploadedImageUrl = null;
+                } finally {
+                    uploadProgress.classList.add('hidden');
+                    submitBtn.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+
         } catch (error) {
-            console.error('Cloudinary error:', error);
-            showMessage('Ошибка загрузки фото. Попробуйте ещё раз.', 'error');
-            uploadedImageUrl = null;
-        } finally {
+            console.error('Upload error:', error);
+            showMessage('Ошибка: ' + error.message, 'error');
             uploadProgress.classList.add('hidden');
             submitBtn.disabled = false;
         }
     }
 
-    // --- ОТПРАВКА ФОРМЫ ---
+    // === ОТПРАВКА ФОРМЫ ===
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -145,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Собираем данные формы
         const productData = {
             title: document.getElementById('product-title').value.trim(),
             description: document.getElementById('product-description').value.trim(),
@@ -157,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map(t => t.trim().toLowerCase())
                 .filter(t => t.length > 0),
             image: uploadedImageUrl,
-            // Привязка к пользователю (для будущей фильтрации)
             userId: currentUser.id,
             authorName: currentUser.name,
             authorEmail: currentUser.email,
@@ -183,12 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 uploadPlaceholder.classList.remove('hidden');
                 uploadedImageUrl = null;
                 
-                // Возвращаем школу из профиля
                 if (currentUser.school) {
                     document.getElementById('product-school').value = currentUser.school;
                 }
 
-                // Через 2 секунды редирект в профиль
                 setTimeout(() => {
                     window.location.href = 'profile.html';
                 }, 2000);
@@ -204,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Вспомогательная функция для сообщений
+    // === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ===
     function showMessage(text, type) {
         formMessage.textContent = text;
         formMessage.className = 'form-message ' + type;

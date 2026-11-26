@@ -10,18 +10,30 @@
 </head>
 <body>
 
-    <!-- Шапка -->
+        <!-- Шапка (идентичная главной) -->
     <header class="site-header">
         <div class="container header-content">
-            <a href="index.html" class="logo-area">
-                <img src="images/logo/logo.png" alt="Logo" class="logo-img">
-                <div class="logo-text"><h1>FS "Тускул"</h1></div>
-            </a>
+            <div class="logo-area">
+                <img src="images/logo/logo.png" alt="Логотип Тускул" class="logo-img">
+                <div class="logo-text">
+                    <h1>FS "Тускул"</h1>
+                    <span>From School to School</span>
+                </div>
+            </div>
+            
             <nav class="main-nav">
-                <a href="index.html">Главная</a>
-                <a href="catalog.html">Каталог</a>
-                <a href="profile.html">Профиль</a>
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="upload.html" class="active">Продать модель</a></li>
+                    <li><a href="about.html">О проекте</a></li>
+                </ul>
             </nav>
+
+            <div class="user-actions">
+                <a href="profile.html" class="btn btn-outline">Профиль</a>
+                <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+            </div>
         </div>
     </header>
 
