@@ -129,68 +129,143 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function attachActionHandlers() {
-        document.querySelectorAll('.btn-approve, .btn-reject, .btn-delete').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const productId = e.target.dataset.id;
-                const action = e.target.dataset.action;
+        // Используем делегирование событий на контейнер
+        const applicationsList = document.getElementById('applications-list');
+        
+        if (!applicationsList) return;
 
-                // определение того что делать
-                let confirmMessage = '';
-                if (action === 'approve') {
-                    confirmMessage = 'Вы уверены, что хотите одобрить этот проект?';
-                } else if (action === 'reject') {
-                    confirmMessage = 'Вы уверены, что хотите отклонить этот проект?';
-                } else if (action === 'delete') {
-                    confirmMessage = 'Вы уверены, что хотите УДАЛИТЬ этот проект? Это действие нельзя отменить!';
-                }
+        applicationsList.addEventListener('click', async (e) => {
+            // Ищем ближайшую кнопку (если кликнули на иконку внутри кнопки)
+            const btn = e.target.closest('.btn-approve, .btn-reject, .btn-delete');
+            
+            if (!btn) return;
+            
+            // Если кнопка disabled — игнорируем
+            if (btn.disabled) return;
 
-                if (!confirm(confirmMessage)) {
-                    return;
-                }
+            const productId = btn.dataset.id;
+            const action = btn.dataset.action;
 
-                e.target.disabled = true;
-                const originalText = e.target.textContent;
-                e.target.textContent = 'Обработка...';
+            if (!productId || !action) return;
 
-                try {
-                    const response = await fetch('/api/moderate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            productId,
-                            action,
-                            adminId: currentUser.id
-                        })
-                    });
+            // Определяем сообщение подтверждения
+            let confirmMessage = '';
+            if (action === 'approve') {
+                confirmMessage = 'Вы уверены, что хотите одобрить этот проект?';
+            } else if (action === 'reject') {
+                confirmMessage = 'Вы уверены, что хотите отклонить этот проект?';
+            } else if (action === 'delete') {
+                confirmMessage = '⚠️ Вы уверены, что хотите БЕЗВОЗВРАТНО УДАЛИТЬ этот проект? Это действие нельзя отменить!';
+            }
 
-                    const data = await response.json();
+            if (!confirm(confirmMessage)) {
+                return;
+            }
 
-                    if (response.ok) {
-                        if (action === 'delete') {
-                            // удаление из локального массива
-                            allApplications = allApplications.filter(a => a._id !== productId);
-                            renderApplications();
-                        } else {
-                            // обновление статуса
-                            const app = allApplications.find(a => a._id === productId);
-                            if (app) {
-                                app.status = data.newStatus;
-                            }
-                            await loadApplications();
+            // Блокируем все кнопки в этой карточке
+            const card = btn.closest('.application-card');
+            if (card) {
+                card.querySelectorAll('button').forEach(b => b.disabled = true);
+            }
+            
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Обработка...';
+
+            try {
+                const response = await fetch('/api/moderate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId,
+                        action,
+                        adminId: currentUser.id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (action === 'delete') {
+                        // Удаляем карточку из DOM
+                        if (card) {
+                            card.style.transition = 'opacity 0.3s, transform 0.3s';
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateX(-20px)';
+                            setTimeout(() => {
+                                card.remove();
+                                // Обновляем массив
+                                allApplications = allApplications.filter(a => a._id !== productId);
+                                updateStats();
+                            }, 300);
                         }
-                        
-                        alert(data.message);
                     } else {
-                        throw new Error(data.error || 'Ошибка при модерации');
+                        // Обновляем статус
+                        const app = allApplications.find(a => a._id === productId);
+                        if (app) {
+                            app.status = data.newStatus;
+                        }
+                        // Перерисовываем
+                        renderApplications();
+                        updateStats();
                     }
-                } catch (error) {
-                    console.error('Moderation error:', error);
-                    alert('Ошибка: ' + error.message);
-                    e.target.disabled = false;
-                    e.target.textContent = originalText;
+                    
+                    // Показываем уведомление
+                    showNotification(data.message, 'success');
+                } else {
+                    throw new Error(data.error || 'Ошибка при модерации');
                 }
-            });
+            } catch (error) {
+                console.error('Moderation error:', error);
+                showNotification('Ошибка: ' + error.message, 'error');
+                // Разблокируем кнопки
+                if (card) {
+                    card.querySelectorAll('button').forEach(b => b.disabled = false);
+                }
+                btn.textContent = originalText;
+            }
         });
+    }
+
+    // Функция обновления статистики
+    function updateStats() {
+        const pending = allApplications.filter(a => a.status === 'pending').length;
+        const approved = allApplications.filter(a => a.status === 'approved').length;
+        const rejected = allApplications.filter(a => a.status === 'rejected').length;
+        
+        const statPending = document.getElementById('stat-pending');
+        const statApproved = document.getElementById('stat-approved');
+        const statRejected = document.getElementById('stat-rejected');
+        
+        if (statPending) statPending.textContent = pending;
+        if (statApproved) statApproved.textContent = approved;
+        if (statRejected) statRejected.textContent = rejected;
+    }
+
+    // Функция для уведомлений
+    function showNotification(text, type) {
+        // Создаём временное уведомление
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 100000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            ${type === 'success' ? 'background: #28a745;' : 'background: #dc3545;'}
+        `;
+        notification.textContent = text;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     // обработчики фильтров
