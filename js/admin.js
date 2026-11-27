@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = '⏳ Обработка...';
 
             try {
-                const response = await fetch('/api/moderate', {
+                const response = await fetch('/api/moderate.js', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
