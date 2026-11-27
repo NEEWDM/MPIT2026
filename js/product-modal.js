@@ -5,7 +5,9 @@
  */
 
 // Глобальная функция для открытия модалки проекта
-window.openProductModal = function(product) {
+// Глобальная функция для открытия модалки проекта
+// isOwner — если true, скрывает кнопку "Купить" (для своего профиля)
+window.openProductModal = function(product, isOwner = false) {
     // Форматируем дату
     const formattedDate = new Date(product.createdAt).toLocaleDateString('ru-RU', {
         year: 'numeric',
@@ -38,6 +40,18 @@ window.openProductModal = function(product) {
 
     // Ссылка на автора
     const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
+
+    // Кнопка "Купить" — показываем только если это НЕ профиль владельца
+    const buyButtonHTML = isOwner 
+        ? `<button class="btn btn-secondary" onclick="closeProductModal()">Закрыть</button>`
+        : `
+            <button class="btn btn-primary" onclick="closeProductModal(); openOrderModal('${product._id}', '${product.title.replace(/'/g, "\\'")}', ${product.price})">
+                🛒 Купить
+            </button>
+            <button class="btn btn-secondary" onclick="closeProductModal()">
+                Закрыть
+            </button>
+          `;
 
     const modalHTML = `
         <div id="product-modal" class="product-modal">
@@ -84,12 +98,7 @@ window.openProductModal = function(product) {
                     </div>
 
                     <div class="product-modal-footer">
-                        <button class="btn btn-primary" onclick="closeProductModal(); openOrderModal('${product._id}', '${product.title.replace(/'/g, "\\'")}', ${product.price})">
-                            🛒 Купить
-                        </button>
-                        <button class="btn btn-secondary" onclick="closeProductModal()">
-                            Закрыть
-                        </button>
+                        ${buyButtonHTML}
                     </div>
                 </div>
             </div>
@@ -108,19 +117,3 @@ window.openProductModal = function(product) {
     // Закрытие по Escape
     document.addEventListener('keydown', handleEscape);
 };
-
-// Закрыть модалку
-window.closeProductModal = function() {
-    const modal = document.getElementById('product-modal');
-    if (modal) {
-        modal.remove();
-    }
-    document.removeEventListener('keydown', handleEscape);
-};
-
-// Обработчик Escape
-function handleEscape(e) {
-    if (e.key === 'Escape') {
-        closeProductModal();
-    }
-}

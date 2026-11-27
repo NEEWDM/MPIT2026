@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
-
+            
             // Обработчики на кликабельные изображения
             document.querySelectorAll('.product-image-clickable').forEach(img => {
                 img.style.cursor = 'pointer';
@@ -227,7 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
                         if (typeof openProductModal === 'function') {
-                            openProductModal(productData);
+                            // Передаём true — это профиль владельца, кнопку "Купить" не показываем
+                            openProductModal(productData, true);
                         }
                     } catch (error) {
                         console.error('Ошибка открытия модалки:', error);
