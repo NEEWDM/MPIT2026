@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (response.ok) {
-                showMessage('🎉 Проект успешно опубликован!', 'success');
+                showMessage('🎉 Проект отправлен на модерации!', 'success');
                 uploadForm.reset();
                 imagePreview.classList.add('hidden');
                 uploadPlaceholder.classList.remove('hidden');
