@@ -34,9 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         limitedProducts.forEach(product => {
             const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
             
+            // Экранируем кавычки для inline onclick
+            const productData = encodeURIComponent(JSON.stringify(product));
+            
             const cardHTML = `
                 <article class="product-card">
-                    <img src="${product.image}" alt="${product.title}" class="product-image" 
+                    <img src="${product.image}" alt="${product.title}" class="product-image product-image-clickable" 
+                         data-product='${productData}'
                          onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                     <div class="product-info">
                         <div class="product-category">${product.category}</div>
@@ -60,7 +64,21 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             gridContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
-
+                // Навешиваем обработчики на кликабельные изображения
+        document.querySelectorAll('.product-image-clickable').forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', (e) => {
+                try {
+                    const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
+                    if (typeof openProductModal === 'function') {
+                        openProductModal(productData);
+                    }
+                } catch (error) {
+                    console.error('Ошибка открытия модалки:', error);
+                }
+            });                                 
+        });
+        
         // навешивание обработчиков на "купить"
         document.querySelectorAll('.buy-button').forEach(btn => {
             btn.addEventListener('click', (e) => {

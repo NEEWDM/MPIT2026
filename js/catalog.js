@@ -48,9 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
         products.forEach(product => {
             const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
             
+            const productData = encodeURIComponent(JSON.stringify(product));
+            
             const cardHTML = `
                 <article class="product-card">
-                    <img src="${product.image}" alt="${product.title}" class="product-image"
+                    <img src="${product.image}" alt="${product.title}" class="product-image product-image-clickable"
+                         data-product='${productData}'
                          onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                     <div class="product-info">
                         <div class="product-category">${getCategoryName(product.category)}</div>
@@ -147,6 +150,20 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
+        // Навешиваем обработчики на кликабельные изображения
+    document.querySelectorAll('.product-image-clickable').forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', (e) => {
+            try {
+                const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
+                if (typeof openProductModal === 'function') {
+                    openProductModal(productData);
+                }
+            } catch (error) {
+                console.error('Ошибка открытия модалки:', error);
+            }
+        });
+    });
 
     // уже не нужно, я умный
     /*window.addToCart = function(productId) {

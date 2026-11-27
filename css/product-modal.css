@@ -1,0 +1,229 @@
+/* === МОДАЛЬНОЕ ОКНО ПРОЕКТА === */
+
+.product-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.product-modal-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--color-accent);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.product-modal-header {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 14px 14px 0 0;
+    background: var(--color-light-gray);
+}
+
+.product-modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.product-modal-close:hover {
+    background: var(--color-accent);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.product-modal-body {
+    padding: 30px;
+}
+
+.product-modal-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 15px 0;
+}
+
+.product-modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--color-light-gray);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.meta-item strong {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.meta-item.price {
+    background: rgba(0, 85, 255, 0.1);
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.product-modal-description {
+    margin-bottom: 25px;
+}
+
+.product-modal-description h4 {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.product-modal-description p {
+    color: #555;
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.product-modal-tags {
+    margin-bottom: 25px;
+}
+
+.product-modal-tags h4 {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-item {
+    background: var(--color-light-gray);
+    padding: 6px 14px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #666;
+    border: 1px solid var(--color-border);
+    transition: 0.3s;
+}
+
+.tag-item:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.product-modal-footer {
+    display: flex;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 2px solid var(--color-border);
+}
+
+.product-modal-footer .btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 1.05rem;
+}
+
+.product-modal-footer .btn-secondary {
+    flex: 0.5;
+}
+
+.no-description {
+    color: #999;
+    font-style: italic;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+    .product-modal-header {
+        height: 220px;
+    }
+    
+    .product-modal-body {
+        padding: 20px;
+    }
+    
+    .product-modal-title {
+        font-size: 1.5rem;
+    }
+    
+    .product-modal-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .meta-item {
+        width: 100%;
+    }
+    
+    .product-modal-footer {
+        flex-direction: column;
+    }
+    
+    .product-modal-footer .btn-secondary {
+        flex: 1;
+    }
+}
