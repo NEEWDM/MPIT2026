@@ -412,4 +412,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // загрузка заказов
     loadOrders();
+    attachActionHandlers();
 });

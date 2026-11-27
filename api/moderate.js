@@ -65,26 +65,39 @@ module.exports = async function handler(req, res) {
         }
 
         // давание статуса
-        const newStatus = action === 'approve' ? 'approved' : 'rejected';
+    // Определяем новый статус
+    const newStatus = action === 'approve' ? 'approved' : 'rejected';
 
-        // обновление статуса
-        const result = await products.updateOne(
-            { _id: new ObjectId(productId) },
-            { $set: { status: newStatus, moderatedAt: new Date(), moderatedBy: adminId } }
-        );
-
-        if (result.modifiedCount === 0) {
-            return res.status(500).json({ error: 'Не удалось обновить статус' });
+    // Обработка удаления
+    if (action === 'delete') {
+        const result = await products.deleteOne({ _id: new ObjectId(productId) });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Проект не найден' });
         }
-
-        // все вроде хорошо но нет
 
         return res.status(200).json({
             success: true,
-            productId,
-            newStatus,
-            message: action === 'approve' ? 'Проект одобрен и опубликован' : 'Проект отклонён'
+            message: 'Проект успешно удалён'
         });
+    }
+
+    // Обновляем статус (для approve/reject)
+    const result = await products.updateOne(
+        { _id: new ObjectId(productId) },
+        { $set: { status: newStatus, moderatedAt: new Date(), moderatedBy: adminId } }
+    );
+
+    if (result.modifiedCount === 0) {
+        return res.status(500).json({ error: 'Не удалось обновить статус' });
+    }
+
+    return res.status(200).json({
+        success: true,
+        productId,
+        newStatus,
+        message: action === 'approve' ? 'Проект одобрен и опубликован' : 'Проект отклонён'
+    });
 
     } catch (error) {
         console.error('Moderate API Error:', error);
