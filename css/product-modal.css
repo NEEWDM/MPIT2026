@@ -1,4 +1,4 @@
-/* === МОДАЛЬНОЕ ОКНО ПРОЕКТА === */
+/* === PROJECT-MODAL-WINDOW === */
 
 .product-modal {
     position: fixed;
@@ -39,7 +39,7 @@
     }
 }
 
-/* Контейнер изображения - без фиксированной высоты */
+/* IMAGE-CONTAINER */
 .product-modal-header {
     position: relative;
     width: 100%;
@@ -51,7 +51,7 @@
     justify-content: center;
 }
 
-/* Изображение отображается ПОЛНОСТЬЮ */
+/* WHOLE-IMAGE */
 .product-modal-image {
     width: 100%;
     height: auto;
@@ -203,7 +203,7 @@
     font-style: italic;
 }
 
-/* Адаптив */
+/* ADAPTIVE */
 @media (max-width: 600px) {
     .product-modal-image {
         max-height: 350px;

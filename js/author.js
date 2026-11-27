@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             authorProductsGrid.insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        // Обработчики на кликабельные изображения (только для новых карточек)
+        // обработчики на тыкательное
         authorProductsGrid.querySelectorAll('.product-image-clickable').forEach(img => {
             const newImg = img.cloneNode(true);
             img.parentNode.replaceChild(newImg, img);

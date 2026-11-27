@@ -1,23 +1,18 @@
-/**
- * product-modal.js
- * Логика модального окна с детальной информацией о проекте.
- * Открывается при клике на изображение проекта.
- */
+//модалка для превью
 
-// Глобальная функция для открытия модалки проекта
-// isOwner — если true, скрывает кнопку "Купить" (для своего профиля)
+// костылевание чтобы выйти
 window.openProductModal = function(product, isOwner = false) {
-    // Сначала закрываем существующую модалку, если есть
+    // закрыть если уже есть, анти наслаивание
     closeProductModal();
 
-    // Форматируем дату
+    // датавание
     const formattedDate = new Date(product.createdAt).toLocaleDateString('ru-RU', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
     });
 
-    // Названия категорий
+    // категории
     const categoryNames = {
         '3d_print': '3D Печать',
         'robotics': 'Робототехника',
@@ -30,20 +25,20 @@ window.openProductModal = function(product, isOwner = false) {
 
     const categoryName = categoryNames[product.category] || product.category;
 
-    // Генерируем теги
+    // теги
     const tagsHTML = (product.tags && product.tags.length > 0) 
         ? product.tags.map(tag => `<span class="tag-item">#${tag}</span>`).join('')
         : '<span style="color:#999; font-style:italic;">Ключевые слова не указаны</span>';
 
-    // Описание
+    // описание
     const descriptionHTML = product.description 
         ? `<p>${product.description}</p>`
         : '<p class="no-description">Описание не добавлено</p>';
 
-    // Ссылка на автора
+    // ссылка на автора
     const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
 
-    // Кнопка "Купить" — показываем только если это НЕ профиль владельца
+    // это владелец?
     const buyButtonHTML = isOwner 
         ? `<button class="btn btn-secondary" onclick="closeProductModal()">Закрыть</button>`
         : `
@@ -109,21 +104,21 @@ window.openProductModal = function(product, isOwner = false) {
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    // Получаем ссылку на только что созданную модалку
+    // ссылка на модалку
     const modal = document.querySelector('.product-modal');
 
-    // Закрытие по клику вне модалки
+    // закрытие за клик вне
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeProductModal();
         }
     });
 
-    // Закрытие по Escape
+    // ескейп
     document.addEventListener('keydown', handleEscape);
 };
 
-// Закрыть модалку
+// закрыть как человек
 window.closeProductModal = function() {
     const modal = document.querySelector('.product-modal');
     if (modal) {
@@ -132,7 +127,7 @@ window.closeProductModal = function() {
     document.removeEventListener('keydown', handleEscape);
 };
 
-// Обработчик Escape
+// ескейп
 function handleEscape(e) {
     if (e.key === 'Escape') {
         closeProductModal();

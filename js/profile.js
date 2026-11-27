@@ -220,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
             
-            // Обработчики на кликабельные изображения (только для новых карточек)
+            // обработчики на кликабельные изображения
             grid.querySelectorAll('.product-image-clickable').forEach(img => {
-                // Удаляем старые обработчики, если есть
+                // удалить стариков
                 const newImg = img.cloneNode(true);
                 img.parentNode.replaceChild(newImg, img);
                 

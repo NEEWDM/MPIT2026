@@ -160,7 +160,7 @@ ul { list-style: none; }
     border-color: var(--color-accent);
 }
 
-/* Кликабельное изображение проекта */
+/* PRODUCT-IMAGE */
 .product-image-clickable {
     cursor: pointer;
     transition: transform 0.3s, filter 0.3s;
@@ -172,7 +172,7 @@ ul { list-style: none; }
 }
 
 .product-card:hover .product-image-clickable {
-    transform: none; /* Отменяем общий hover карточки для картинки */
+    transform: none; /* HOVER-CANCELATION */
 }
 
 .product-image {

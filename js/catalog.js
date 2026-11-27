@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
-        // Обработчики на кликабельные изображения (только для новых карточек)
+        // обработчики на тыкательное
         catalogGrid.querySelectorAll('.product-image-clickable').forEach(img => {
             const newImg = img.cloneNode(true);
             img.parentNode.replaceChild(newImg, img);

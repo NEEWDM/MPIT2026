@@ -129,18 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function attachActionHandlers() {
-        // Используем делегирование событий на контейнер
+        // события на контейнер делегируем
         const applicationsList = document.getElementById('applications-list');
         
         if (!applicationsList) return;
 
         applicationsList.addEventListener('click', async (e) => {
-            // Ищем ближайшую кнопку (если кликнули на иконку внутри кнопки)
+            // на случай кнопки в кнопке
             const btn = e.target.closest('.btn-approve, .btn-reject, .btn-delete');
             
             if (!btn) return;
             
-            // Если кнопка disabled — игнорируем
+            // игнор выключенного
             if (btn.disabled) return;
 
             const productId = btn.dataset.id;
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!productId || !action) return;
 
-            // Определяем сообщение подтверждения
+            // сообщение УВЕРЕНЫЫЫЫ?
             let confirmMessage = '';
             if (action === 'approve') {
                 confirmMessage = 'Вы уверены, что хотите одобрить этот проект?';
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Блокируем все кнопки в этой карточке
+            // Игнор кнопок
             const card = btn.closest('.application-card');
             if (card) {
                 card.querySelectorAll('button').forEach(b => b.disabled = true);
@@ -186,30 +186,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     if (action === 'delete') {
-                        // Удаляем карточку из DOM
+                        // минус карточка в DOM
                         if (card) {
                             card.style.transition = 'opacity 0.3s, transform 0.3s';
                             card.style.opacity = '0';
                             card.style.transform = 'translateX(-20px)';
                             setTimeout(() => {
                                 card.remove();
-                                // Обновляем массив
+                                // массив обновляется
                                 allApplications = allApplications.filter(a => a._id !== productId);
                                 updateStats();
                             }, 300);
                         }
                     } else {
-                        // Обновляем статус
+                        // статус обновляется
                         const app = allApplications.find(a => a._id === productId);
                         if (app) {
                             app.status = data.newStatus;
                         }
-                        // Перерисовываем
+                        // Перерендер
                         renderApplications();
                         updateStats();
                     }
                     
-                    // Показываем уведомление
+                    // уведомление
                     showNotification(data.message, 'success');
                 } else {
                     throw new Error(data.error || 'Ошибка при модерации');
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error('Moderation error:', error);
                 showNotification('Ошибка: ' + error.message, 'error');
-                // Разблокируем кнопки
+                // снова кнопки найс
                 if (card) {
                     card.querySelectorAll('button').forEach(b => b.disabled = false);
                 }
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Функция обновления статистики
+    // обновление статистики
     function updateStats() {
         const pending = allApplications.filter(a => a.status === 'pending').length;
         const approved = allApplications.filter(a => a.status === 'approved').length;
@@ -241,9 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statRejected) statRejected.textContent = rejected;
     }
 
-    // Функция для уведомлений
+    // уведомления
     function showNotification(text, type) {
-        // Создаём временное уведомление
+        // уведомление короткое
         const notification = document.createElement('div');
         notification.style.cssText = `
             position: fixed;

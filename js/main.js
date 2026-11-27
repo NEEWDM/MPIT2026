@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         limitedProducts.forEach(product => {
             const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
             
-            // Экранируем кавычки для inline onclick
+            // кавычкование
             const productData = encodeURIComponent(JSON.stringify(product));
             
             const cardHTML = `
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             gridContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
-                // Навешиваем обработчики на кликабельные изображения
+                // обработчики на тыкательное
         document.querySelectorAll('.product-image-clickable').forEach(img => {
             img.style.cursor = 'pointer';
             img.addEventListener('click', (e) => {
