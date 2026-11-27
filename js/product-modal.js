@@ -5,9 +5,11 @@
  */
 
 // Глобальная функция для открытия модалки проекта
-// Глобальная функция для открытия модалки проекта
 // isOwner — если true, скрывает кнопку "Купить" (для своего профиля)
 window.openProductModal = function(product, isOwner = false) {
+    // Сначала закрываем существующую модалку, если есть
+    closeProductModal();
+
     // Форматируем дату
     const formattedDate = new Date(product.createdAt).toLocaleDateString('ru-RU', {
         year: 'numeric',
@@ -54,7 +56,7 @@ window.openProductModal = function(product, isOwner = false) {
           `;
 
     const modalHTML = `
-        <div id="product-modal" class="product-modal">
+        <div class="product-modal">
             <div class="product-modal-content">
                 <div class="product-modal-header">
                     <img src="${product.image}" alt="${product.title}" class="product-modal-image"
@@ -107,9 +109,12 @@ window.openProductModal = function(product, isOwner = false) {
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
+    // Получаем ссылку на только что созданную модалку
+    const modal = document.querySelector('.product-modal');
+
     // Закрытие по клику вне модалки
-    document.getElementById('product-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'product-modal') {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
             closeProductModal();
         }
     });
@@ -117,3 +122,19 @@ window.openProductModal = function(product, isOwner = false) {
     // Закрытие по Escape
     document.addEventListener('keydown', handleEscape);
 };
+
+// Закрыть модалку
+window.closeProductModal = function() {
+    const modal = document.querySelector('.product-modal');
+    if (modal) {
+        modal.remove();
+    }
+    document.removeEventListener('keydown', handleEscape);
+};
+
+// Обработчик Escape
+function handleEscape(e) {
+    if (e.key === 'Escape') {
+        closeProductModal();
+    }
+}

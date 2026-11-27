@@ -180,20 +180,23 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
-        // Навешиваем обработчики на кликабельные изображения
-    document.querySelectorAll('.product-image-clickable').forEach(img => {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', (e) => {
-            try {
-                const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
-                if (typeof openProductModal === 'function') {
-                    openProductModal(productData);
+        // Обработчики на кликабельные изображения (только для новых карточек)
+        catalogGrid.querySelectorAll('.product-image-clickable').forEach(img => {
+            const newImg = img.cloneNode(true);
+            img.parentNode.replaceChild(newImg, img);
+            
+            newImg.style.cursor = 'pointer';
+            newImg.addEventListener('click', (e) => {
+                try {
+                    const productData = JSON.parse(decodeURIComponent(e.currentTarget.dataset.product));
+                    if (typeof openProductModal === 'function') {
+                        openProductModal(productData);
+                    }
+                } catch (error) {
+                    console.error('Ошибка открытия модалки:', error);
                 }
-            } catch (error) {
-                console.error('Ошибка открытия модалки:', error);
-            }
+            });
         });
-    });
 
     // уже не нужно, я умный
     /*window.addToCart = function(productId) {

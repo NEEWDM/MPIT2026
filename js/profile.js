@@ -220,14 +220,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
             
-            // Обработчики на кликабельные изображения
-            document.querySelectorAll('.product-image-clickable').forEach(img => {
-                img.style.cursor = 'pointer';
-                img.addEventListener('click', (e) => {
+            // Обработчики на кликабельные изображения (только для новых карточек)
+            grid.querySelectorAll('.product-image-clickable').forEach(img => {
+                // Удаляем старые обработчики, если есть
+                const newImg = img.cloneNode(true);
+                img.parentNode.replaceChild(newImg, img);
+                
+                newImg.style.cursor = 'pointer';
+                newImg.addEventListener('click', (e) => {
                     try {
-                        const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
+                        const productData = JSON.parse(decodeURIComponent(e.currentTarget.dataset.product));
                         if (typeof openProductModal === 'function') {
-                            // Передаём true — это профиль владельца, кнопку "Купить" не показываем
                             openProductModal(productData, true);
                         }
                     } catch (error) {
