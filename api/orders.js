@@ -1,10 +1,4 @@
-/**
- * api/orders.js
- * API для управления заказами.
- * GET - получить заказы (по userId или все для админа)
- * POST - создать новый заказ
- * PUT - обновить статус заказа (для админа)
- */
+//заказы
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -28,21 +22,21 @@ module.exports = async function handler(req, res) {
         const orders = database.collection('orders');
         const users = database.collection('users');
 
-        // GET - получить заказы
+        // получалка
         if (req.method === 'GET') {
             const filter = {};
             
-            // Если передан userId - фильтруем по покупателю
+            // если есть айди, то фильтрация по нему
             if (req.query.userId) {
                 filter.buyerId = req.query.userId;
             }
             
-            // Если передан status - фильтруем по статусу
+            // если есть статус, то фильтрация по нему
             if (req.query.status) {
                 filter.status = req.query.status;
             }
             
-            // Если isAdmin=true и нет userId - показываем все заказы
+            // если админ, и нет айди, то все показываем
             if (req.query.isAdmin === 'true' && !req.query.userId) {
                 // Показываем все заказы
             }
@@ -54,7 +48,7 @@ module.exports = async function handler(req, res) {
             return res.status(200).json(ordersList);
         }
 
-        // POST - создать новый заказ
+        // постить заказы
         if (req.method === 'POST') {
             const { productId, contact, quantity, comment, buyerId, buyerName } = req.body;
 
@@ -82,7 +76,7 @@ module.exports = async function handler(req, res) {
             });
         }
 
-        // PUT - обновить статус заказа (для админа)
+        // обновление статуса заказа
         if (req.method === 'PUT') {
             const { orderId, action, adminId } = req.body;
 
@@ -94,7 +88,7 @@ module.exports = async function handler(req, res) {
                 return res.status(400).json({ error: 'Неверное действие' });
             }
 
-            // Проверяем, что пользователь — администратор
+            // провека на админновость
             const admin = await users.findOne({ _id: new ObjectId(adminId) });
             
             if (!admin || !admin.isAdmin) {

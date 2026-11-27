@@ -1,8 +1,4 @@
-/**
- * api/user.js
- * Vercel Serverless Function для получения данных пользователя по ID.
- * Используется для отображения публичного профиля автора.
- */
+//данные пользователя для его профиля(с чужих глаз)
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -41,14 +37,14 @@ module.exports = async function handler(req, res) {
         const database = clientConn.db('tuscul');
         const users = database.collection('users');
 
-        // Ищем пользователя по ID
+        // ищем кого брать
         const user = await users.findOne({ _id: new ObjectId(userId) });
 
         if (!user) {
             return res.status(404).json({ error: 'Пользователь не найден' });
         }
 
-        // Возвращаем только публичные данные (без пароля!)
+        // публичные данные
         const publicUserData = {
             id: user._id.toString(),
             name: user.name,

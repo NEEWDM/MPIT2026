@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 
 module.exports = async function handler(req, res) {
-    // CORS заголовки
+    // заголовки
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -15,7 +15,7 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // Проверка переменной окружения
+    // жоско умный предохранитель секретов окружения
     if (!process.env.MONGODB_URI) {
         console.error('MONGODB_URI не установлен!');
         return res.status(500).json({ error: 'Database configuration error' });
@@ -47,7 +47,7 @@ module.exports = async function handler(req, res) {
 
             const hashedPassword = await bcrypt.hash(password, 10);
             
-            // Проверяем код администратора
+            // проверка кода чтобы дать админку
             const isAdmin = req.body.adminCode === 'TUSCUL-ADMIN-2026';
 
             const newUser = {

@@ -10,7 +10,7 @@
 </head>
 <body>
 
-        <!-- Шапка (идентичная главной) -->
+        <!-- шапка -->
     <header class="site-header">
         <div class="container header-content">
             <div class="logo-area">
@@ -38,7 +38,7 @@
 
     <main class="container section-padding">
         
-        <!-- Сообщение для неавторизованных (показывается если нет пользователя) -->
+        <!-- идди авторизируйся -->
         <section id="auth-required" class="auth-required hidden">
             <div class="auth-required-card">
                 <h2>⚠️ Требуется авторизация</h2>
@@ -47,14 +47,14 @@
             </div>
         </section>
 
-        <!-- Форма загрузки (показывается только авторизованным) -->
+        <!-- загрузочник -->
         <section id="upload-section" class="upload-container hidden">
             <h2 class="page-title">Загрузить новый проект</h2>
             <p class="page-subtitle">Поделитесь своей работой с другими школьниками и центрами творчества</p>
 
             <form id="upload-form" class="upload-form">
                 
-                <!-- Загрузка фото -->
+                <!-- загрузка фото -->
                 <div class="form-group">
                     <label>Фотография проекта *</label>
                     <div class="file-upload-area" id="file-upload-area">
@@ -72,19 +72,19 @@
                     </div>
                 </div>
 
-                <!-- Название -->
+                <!-- название -->
                 <div class="form-group">
                     <label for="product-title">Название проекта *</label>
                     <input type="text" id="product-title" placeholder="Например: Робот-манипулятор v2.0" required maxlength="100">
                 </div>
 
-                <!-- Описание -->
+                <!-- описание -->
                 <div class="form-group">
                     <label for="product-description">Описание</label>
                     <textarea id="product-description" placeholder="Расскажите о своём проекте: что это, как сделано, особенности..." rows="4" maxlength="500"></textarea>
                 </div>
 
-                <!-- Категория и цена в одну строку -->
+                <!-- категория и цена в одну строку -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="product-category">Категория *</label>
@@ -105,20 +105,20 @@
                     </div>
                 </div>
 
-                <!-- Школа/учреждение -->
+                <!-- школа/учреждение -->
                 <div class="form-group">
                     <label for="product-school">Школа / Учреждение *</label>
                     <input type="text" id="product-school" placeholder="Например: ЦДТТ 'Импульс'" required maxlength="100">
                 </div>
 
-                <!-- Ключевые слова (для будущего поиска) -->
+                <!-- ключевые слова -->
                 <div class="form-group">
                     <label for="product-tags">Ключевые слова</label>
                     <input type="text" id="product-tags" placeholder="arduino, робот, 3d, школа (через запятую)">
                     <span class="form-hint">Поможет покупателям найти ваш проект</span>
                 </div>
 
-                <!-- Кнопки -->
+                <!-- кнопки -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" id="submit-btn">
                         🚀 Опубликовать проект
@@ -126,7 +126,7 @@
                     <a href="profile.html" class="btn btn-outline">Отмена</a>
                 </div>
 
-                <!-- Сообщение об успехе/ошибке -->
+                <!-- все хорошо/плохо -->
                 <div id="form-message" class="form-message hidden"></div>
             </form>
         </section>

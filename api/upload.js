@@ -1,8 +1,4 @@
-/**
- * api/upload.js
- * Vercel Serverless Function для сохранения проекта в MongoDB.
- * Принимает данные проекта и сохраняет их в коллекцию 'products'.
- */
+//из облако в продуктс
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -48,15 +44,14 @@ module.exports = async function handler(req, res) {
             authorEmail
         } = req.body;
 
-        // Валидация обязательных полей
+        // ну крч все обязательно сделается
         if (!title || !category || !price || !school || !image || !userId) {
             return res.status(400).json({ 
                 error: 'Заполнены не все обязательные поля' 
             });
         }
 
-        // Создаём документ проекта
-        // Структура оптимизирована для будущей фильтрации в каталоге
+        // док проекта(потом надо будет)
         const newProduct = {
             title: title.trim(),
             description: (description || '').trim(),

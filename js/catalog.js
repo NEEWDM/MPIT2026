@@ -72,18 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ПРИМЕНЕНИЕ ФИЛЬТРОВ ===
+    // фильтрование
     filtersForm.addEventListener('submit', (e) => {
         e.preventDefault();
         applyFilters();
     });
 
-    // Сортировка
+    // сортирование
     sortSelect.addEventListener('change', () => {
         applyFilters();
     });
 
-    // Сброс фильтров
+    // сброс фильтров
     resetBtn.addEventListener('click', () => {
         filtersForm.reset();
         applyFilters();
@@ -98,43 +98,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const priceMax = parseInt(document.getElementById('filter-price-max').value) || Infinity;
         const sort = sortSelect.value;
 
-        // Фильтрация
+        // фильтрование
         filteredProducts = allProducts.filter(product => {
-            // Поиск по ключевым словам (название, описание, теги)
+            // по словам
             if (search) {
                 const searchIn = `${product.title} ${product.description || ''} ${(product.tags || []).join(' ')}`.toLowerCase();
                 if (!searchIn.includes(search)) return false;
             }
 
-            // Категория
+            // категориям
             if (category && product.category !== category) return false;
 
-            // Школа
+            // школам
             if (school && !product.school.toLowerCase().includes(school)) return false;
 
-            // Автор
+            // авторам
             if (author && !product.authorName.toLowerCase().includes(author)) return false;
 
-            // Цена
+            // цене
             if (product.price < priceMin || product.price > priceMax) return false;
 
             return true;
         });
 
-        // Сортировка
+        // сортирование
         if (sort === 'price-asc') {
             filteredProducts.sort((a, b) => a.price - b.price);
         } else if (sort === 'price-desc') {
             filteredProducts.sort((a, b) => b.price - a.price);
         } else {
-            // newest - по дате создания
+            // сначала новых
             filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
 
         renderProducts(filteredProducts);
     }
 
-    // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
+    // полезность
     function getCategoryName(code) {
         const names = {
             '3d_print': '3D Печать',
@@ -148,14 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return names[code] || code;
     }
 
-    // Глобальная функция для кнопки "В корзину"
-    window.addToCart = function(productId) {
+    // уже не нужно, я умный
+    /*window.addToCart = function(productId) {
         const cartCount = document.getElementById('cart-count');
         let currentCount = parseInt(cartCount.innerText);
         cartCount.innerText = currentCount + 1;
         alert(`Товар добавлен в корзину!`);
-    };
+    };*/
 
-    // Загружаем проекты при открытии страницы
+    // загрузка проектов
     loadProducts();
 });

@@ -1,9 +1,4 @@
-/**
- * upload.js
- * Логика страницы загрузки проекта.
- * Проверяет авторизацию, загружает фото через серверный API,
- * сохраняет данные проекта в MongoDB.
- */
+//много что, но в основном загрузка
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -18,31 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submit-btn');
     const formMessage = document.getElementById('form-message');
 
-    // === ПРОВЕРКА АВТОРИЗАЦИИ ===
+    // авторизован?
     const currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
 
     if (!currentUser) {
-        // Не авторизован — показываем только блок авторизации
+        // вали авторизуйся
         authRequiredSection.classList.remove('hidden');
         uploadSection.classList.add('hidden');
     } else {
-        // Авторизован — показываем форму
+        // можешь заполнять
         authRequiredSection.classList.add('hidden');
         uploadSection.classList.remove('hidden');
         
-        // Автозаполняем школу из профиля
+        // школу берем по базе
         if (currentUser.school) {
             document.getElementById('product-school').value = currentUser.school;
         }
     }
 
-    // === ЗАГРУЗКА ФОТО ===
+    // загружалка фото
     let uploadedImageUrl = null;
 
-    // Клик по области — открывает выбор файла
+    // выбрать
     uploadArea.addEventListener('click', () => fileInput.click());
 
-    // Drag & Drop
+    // кинуть
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.classList.add('dragover');
@@ -60,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Выбор файла через диалог
+    // выбор файла черезд диалог
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             handleFile(e.target.files[0]);
@@ -68,19 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFile(file) {
-        // Проверка типа файла
+        // проверка типа файла
         if (!file.type.startsWith('image/')) {
             showMessage('Можно загружать только изображения', 'error');
             return;
         }
 
-        // Проверка размера (5MB)
+        // жирность проверка
         if (file.size > 5 * 1024 * 1024) {
             showMessage('Файл слишком большой (макс. 5MB)', 'error');
             return;
         }
 
-        // Показываем превью сразу (до загрузки на сервер)
+        // превью сразу
         const reader = new FileReader();
         reader.onload = (e) => {
             imagePreview.src = e.target.result;
@@ -89,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         reader.readAsDataURL(file);
 
-        // Загружаем через серверный API
+        // загрузка через серверный API
         uploadToServer(file);
     }
 
@@ -99,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('Загрузка фото...', 'success');
 
         try {
-            // Читаем файл как base64
+            // читать файл как base64
             const reader = new FileReader();
             reader.onload = async () => {
                 const base64File = reader.result; // data:image/jpeg;base64,...
@@ -141,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === ОТПРАВКА ФОРМЫ ===
+    // отправить форму
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -210,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ===
+    //  вспомогательность
     function showMessage(text, type) {
         formMessage.textContent = text;
         formMessage.className = 'form-message ' + type;

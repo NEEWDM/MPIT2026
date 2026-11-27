@@ -1,12 +1,8 @@
-/**
- * main.js
- * Основной скрипт для главной страницы FS "Тускул".
- * Загружает товары из MongoDB через Vercel API.
- */
+//товары из бд на главную
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // === ЗАГРУЗКА ТОВАРОВ ИЗ MONGODB ЧЕРЕЗ VERCEL API ===
+    // === загрузка из mongodb ===
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
@@ -22,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadProducts();
 
-    // === ФУНКЦИЯ ОТРИСОВКИ ТОВАРОВ ===
+    // рендер
     function renderProducts(products) {
         const gridContainer = document.getElementById('products-grid');
         gridContainer.innerHTML = '';
@@ -32,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Ограничиваем до 6 проектов для главной страницы
+        // макс 6
         const limitedProducts = products.slice(0, 6);
 
         limitedProducts.forEach(product => {
@@ -65,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridContainer.insertAdjacentHTML('beforeend', cardHTML);
         });
 
-        // Навешиваем обработчики на кнопки "Купить"
+        // навешивание обработчиков на "купить"
         document.querySelectorAll('.buy-button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = e.target.dataset.id;
@@ -81,11 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ФУНКЦИЯ ДОБАВЛЕНИЯ В КОРЗИНУ (заглушка) ===
-    window.addToCart = function(id) {
+    // снова не нужно, я умный
+    /*window.addToCart = function(id) {
         const cartCount = document.getElementById('cart-count');
         let currentCount = parseInt(cartCount.innerText);
         cartCount.innerText = currentCount + 1;
         alert(`Товар ID ${id} добавлен в корзину!`);
-    };
+    };*/
 });

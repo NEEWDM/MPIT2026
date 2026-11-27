@@ -1,8 +1,4 @@
-/**
- * api/moderate.js
- * API для модерации проектов администратором.
- * Принимает productId, action (approve/reject) и userId админа.
- */
+//модерация админом
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -31,7 +27,7 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Неверное действие' });
     }
 
-    // Обработка удаления
+    // удаление
     if (action === 'delete') {
         const result = await products.deleteOne({ _id: new ObjectId(productId) });
         
@@ -54,24 +50,24 @@ module.exports = async function handler(req, res) {
         const users = database.collection('users');
         const products = database.collection('products');
 
-        // Проверяем, что пользователь — администратор
+        // проверка на админность
         const admin = await users.findOne({ _id: new ObjectId(adminId) });
         
         if (!admin || !admin.isAdmin) {
             return res.status(403).json({ error: 'Доступ запрещён. Вы не администратор.' });
         }
 
-        // Находим проект
+        // поиск проекта
         const product = await products.findOne({ _id: new ObjectId(productId) });
         
         if (!product) {
             return res.status(404).json({ error: 'Проект не найден' });
         }
 
-        // Определяем новый статус
+        // давание статуса
         const newStatus = action === 'approve' ? 'approved' : 'rejected';
 
-        // Обновляем статус
+        // обновление статуса
         const result = await products.updateOne(
             { _id: new ObjectId(productId) },
             { $set: { status: newStatus, moderatedAt: new Date(), moderatedBy: adminId } }
@@ -81,8 +77,7 @@ module.exports = async function handler(req, res) {
             return res.status(500).json({ error: 'Не удалось обновить статус' });
         }
 
-        // Если отклонён — удаляем проект через 24 часа (опционально)
-        // Пока просто помечаем как rejected
+        // все вроде хорошо но нет
 
         return res.status(200).json({
             success: true,

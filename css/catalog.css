@@ -1,4 +1,4 @@
-/* === СТРАНИЦА КАТАЛОГА === */
+/* === PAGE === */
 
 .page-title {
     font-size: 2.5rem;
@@ -12,7 +12,7 @@
     font-size: 1.1rem;
 }
 
-/* Двухколоночная сетка */
+/* LAYOUT */
 .catalog-layout {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -20,7 +20,7 @@
     align-items: start;
 }
 
-/* Сайдбар с фильтрами */
+/* SIDEBAR */
 .filters-sidebar {
     position: sticky;
     top: 100px;
@@ -87,7 +87,7 @@
     width: 100%;
 }
 
-/* Результаты */
+/* RESULTS */
 .catalog-results {
     min-height: 400px;
 }
@@ -114,7 +114,7 @@
     cursor: pointer;
 }
 
-/* Сообщение "ничего не найдено" */
+/* NO RESULTS */
 .no-results {
     text-align: center;
     padding: 60px 20px;
@@ -132,7 +132,7 @@
     color: #888;
 }
 
-/* Адаптив */
+/* ADAPTIVE */
 @media (max-width: 900px) {
     .catalog-layout {
         grid-template-columns: 1fr;
@@ -151,7 +151,7 @@
     }
 }
 
-/* === АДАПТИВНОСТЬ КАТАЛОГА === */
+/* === ADAPTIVE === */
 @media (max-width: 900px) {
     .catalog-layout {
         grid-template-columns: 1fr;

@@ -1,8 +1,4 @@
-/**
- * admin.js
- * Логика панели администратора.
- * Проверяет права доступа, загружает заявки и позволяет их модерировать.
- */
+//логика админстраторской панели
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -12,33 +8,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const noApplications = document.getElementById('no-applications');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    // Проверяем авторизацию и права админа
+    // перепроверка на админоподобность
     const currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
 
     if (!currentUser || !currentUser.isAdmin) {
-        // Нет доступа
+        // отказано
         accessDenied.classList.remove('hidden');
         adminPanel.classList.add('hidden');
         return;
     }
 
-    // Показываем панель
+    // показывание панели
     accessDenied.classList.add('hidden');
     adminPanel.classList.remove('hidden');
 
     let currentFilter = 'pending';
     let allApplications = [];
 
-    // Загружаем все заявки
+    // загружение заявок
     loadApplications();
 
     async function loadApplications() {
         try {
-            // Загружаем все проекты независимо от статуса
+            // загрузка всего
             const response = await fetch('/api/products?allStatuses=true');
             
-            // Если API не поддерживает allStatuses, загружаем по отдельности
-            // Для простоты — делаем один запрос и фильтруем на клиенте
+            // фильтрование по аллстатус
             const pendingRes = await fetch('/api/products?status=pending');
             const approvedRes = await fetch('/api/products?status=approved');
             const rejectedRes = await fetch('/api/products?status=rejected');
@@ -49,10 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             allApplications = [...pending, ...approved, ...rejected];
             
-            // Сортируем по дате (новые сверху)
+            // сортировка по новизне
             allApplications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-            // Обновляем статистику
+            // обновление статистики
             document.getElementById('stat-pending').textContent = pending.length;
             document.getElementById('stat-approved').textContent = approved.length;
             document.getElementById('stat-rejected').textContent = rejected.length;
@@ -67,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderApplications() {
         applicationsList.innerHTML = '';
 
-        // Фильтруем по выбранному статусу
+        // фильтр по статусу
         let filtered = allApplications;
         if (currentFilter !== 'all') {
             filtered = allApplications.filter(app => app.status === currentFilter);
@@ -85,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applicationsList.insertAdjacentHTML('beforeend', card);
         });
 
-        // Навешиваем обработчики на кнопки
+        // кнопкам присваевание обработчиков
         attachActionHandlers();
     }
 
@@ -139,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productId = e.target.dataset.id;
                 const action = e.target.dataset.action;
 
-                // Определяем действие
+                // определение того что делать
                 let confirmMessage = '';
                 if (action === 'approve') {
                     confirmMessage = 'Вы уверены, что хотите одобрить этот проект?';
@@ -172,11 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (response.ok) {
                         if (action === 'delete') {
-                            // Удаляем из локального массива
+                            // удаление из локального массива
                             allApplications = allApplications.filter(a => a._id !== productId);
                             renderApplications();
                         } else {
-                            // Обновляем статус
+                            // обновление статуса
                             const app = allApplications.find(a => a._id === productId);
                             if (app) {
                                 app.status = data.newStatus;
@@ -198,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Обработчики фильтров
+    // обработчики фильтров
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
@@ -220,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
-        // === ЗАГРУЗКА ЗАКАЗОВ ===
+        // заказы загружаются
     let allOrders = [];
     let currentOrderFilter = 'pending';
 
@@ -290,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ordersList.insertAdjacentHTML('beforeend', orderHTML);
         });
 
-        // Навешиваем обработчики
+        // вешание обработчиков
         document.querySelectorAll('[data-order-id]').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const orderId = e.target.dataset.orderId;
@@ -330,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Обработчики фильтров заказов
+    // обработчики фильтров непосредственно
     document.querySelectorAll('.order-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.order-filter-btn').forEach(b => b.classList.remove('active'));
@@ -340,6 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Загружаем заказы при загрузке страницы
+    // загрузка заказов
     loadOrders();
 });

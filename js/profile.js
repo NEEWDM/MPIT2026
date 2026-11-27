@@ -1,21 +1,18 @@
-/**
- * profile.js
- * Управление авторизацией, регистрацией, личным кабинетом и контактами.
- */
+// авторизация, регистрация, личный кабинет и все что в нем
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // === ЭЛЕМЕНТЫ DOM ===
+    // DOMики
     const authSection = document.getElementById('auth-section');
     const dashboardSection = document.getElementById('dashboard-section');
     const tabBtns = document.querySelectorAll('.tab-btn');
     const forms = document.querySelectorAll('.auth-form');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // === ТЕКУЩИЙ ПОЛЬЗОВАТЕЛЬ ===
+    // пользователь
     let currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
 
-    // === ПЕРЕКЛЮЧЕНИЕ ТАБОВ ===
+    // переключить табы
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -26,12 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // === ПРОВЕРКА СЕССИИ ===
+    // проверка на СЕССССИЮ
     if (currentUser) {
         showDashboard(currentUser);
     }
 
-    // === РЕГИСТРАЦИЯ ===
+    // регистрация
     document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -69,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === ВХОД ===
+    // вход
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -98,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === ВЫХОД ===
+    // выход
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('tuscul_user');
@@ -110,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ОТОБРАЖЕНИЕ ЛИЧНОГО КАБИНЕТА ===
+    // личный кабинет отображурик
     function showDashboard(user) {
         authSection.classList.add('hidden');
         dashboardSection.classList.remove('hidden');
@@ -119,10 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('dash-school').textContent = `🏫 ${user.school}`;
         document.getElementById('dash-skills').innerHTML = `<span>${user.skills}</span>`;
 
-        // Отображаем контакты
+        // и контакты
         displayContactsInProfile(user.contacts);
 
-        // Загружаем товары
+        // и проекты отрендерить
         renderMyProducts();
 
         const adminActions = document.getElementById('admin-actions');
@@ -133,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === ОТОБРАЖЕНИЕ КОНТАКТОВ В ПРОФИЛЕ ===
+    // отображение контактов
     function displayContactsInProfile(contacts) {
         const contactsContainer = document.getElementById('dash-contacts');
         
@@ -162,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contactsContainer.innerHTML = contactsHTML;
     }
 
-    // === ЗАГРУЗКА И РЕНДЕР МОИХ ТОВАРОВ ===
+    // загрузка и рендер проектов
     async function renderMyProducts() {
         const grid = document.getElementById('my-products-grid');
         
@@ -174,13 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '<p>Загрузка...</p>';
 
         try {
-            // Запрашиваем ВСЕ проекты пользователя (включая pending и rejected)
+            // все проекты пользователя
             const response = await fetch('/api/products?userId=' + currentUser.id + '&allStatus=true');
             const myProducts = await response.json();
 
             grid.innerHTML = '';
 
-            // Считаем только одобренные для статистики
+            // в подсчет только одобренные
             const approvedCount = myProducts.filter(p => p.status === 'approved').length;
             document.getElementById('stat-products').textContent = approvedCount;
 
@@ -190,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             myProducts.forEach(product => {
-                // Определяем статус и стиль
+                // статус и стиль
                 let statusBadge = '';
                 let cardClass = '';
                 
@@ -228,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === РЕДАКТИРОВАНИЕ КОНТАКТОВ ===
+    // редактим контакты
     const editContactsBtn = document.getElementById('edit-contacts-btn');
     const contactsModal = document.getElementById('contacts-modal');
     const closeModalBtn = document.getElementById('close-modal');
@@ -236,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactsForm = document.getElementById('contacts-form');
     const contactsMessage = document.getElementById('contacts-message');
 
-    // Открыть модальное окно
+    // открывашка модального окна
     if (editContactsBtn) {
         editContactsBtn.addEventListener('click', () => {
             if (currentUser && currentUser.contacts) {
@@ -251,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Закрыть модальное окно
+    // закрыть модальное окно
     function closeModal() {
         contactsModal.classList.add('hidden');
         contactsForm.reset();
@@ -274,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Отправка формы контактов
+    // отправить форму контактов
     if (contactsForm) {
         contactsForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -291,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 vk: document.getElementById('edit-vk').value.trim()
             };
 
-            // Убираем пустые поля
+            // убрать пробелы
             Object.keys(newContacts).forEach(key => {
                 if (!newContacts[key]) delete newContacts[key];
             });
@@ -332,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contactsMessage.classList.remove('hidden');
     }
 
-    // === ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ===
+    // полезность
     function getCategoryName(code) {
         const names = {
             '3d_print': '3D Печать',
@@ -345,11 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return names[code] || code;
     }
-        // === ЗАГРУЗКА МОИХ ЗАКАЗОВ ===
+        // загрузка моих заказов(тут что то неладное)
     async function renderMyOrders() {
         const ordersGrid = document.getElementById('my-orders-grid');
         
-        if (!ordersGrid) return;
+        //if (!ordersGrid) return; проверка
         
         if (!currentUser || !currentUser.id) {
             ordersGrid.innerHTML = '<div class="orders-empty">Пользователь не авторизован</div>';
@@ -408,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Вызываем загрузку заказов при показе дашборда
+    // загрузка заказов когда дэшборд открыли
     const originalShowDashboard = showDashboard;
     showDashboard = function(user) {
         originalShowDashboard(user);

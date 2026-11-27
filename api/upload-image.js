@@ -1,8 +1,4 @@
-/**
- * api/upload-image.js
- * Серверный endpoint для загрузки фото в Cloudinary.
- * Принимает файл от клиента, загружает в Cloudinary, возвращает URL.
- */
+// кушаем файлы и в URL их на cloudify
 
 module.exports = async function handler(req, res) {
     // CORS
@@ -18,7 +14,7 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // Проверяем переменные окружения
+    // снова секреты окружения
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
     const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || 'tuscul_uploads';
 
@@ -28,14 +24,14 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        // Получаем файл из тела запроса (base64 или multipart)
+        // принятие закидывания
         const { file, fileName } = req.body;
 
         if (!file) {
             return res.status(400).json({ error: 'Файл не передан' });
         }
 
-        // Cloudinary API для загрузки
+        // апишка для загрузки на облако
         const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
         const formData = new URLSearchParams();

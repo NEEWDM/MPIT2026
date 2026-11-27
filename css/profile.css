@@ -1,4 +1,4 @@
-/* === АВТОРИЗАЦИЯ === */
+/* === AUTHENTICATION === */
 .auth-container {
     max-width: 500px;
     margin: 40px auto;
@@ -70,7 +70,7 @@
 
 .full-width { width: 100%; margin-top: 10px; }
 
-/* === ДАШБОРД === */
+/* === DASHBOARD === */
 .hidden { display: none !important; }
 
 .dashboard-container {
@@ -181,7 +181,7 @@
     margin-left: auto;
 }
 
-/* Статистика */
+/* STATS */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -219,7 +219,7 @@
     font-weight: 500; 
 }
 
-/* Секции */
+/* SECTIONS */
 .my-products-section,
 .my-orders-section {
     margin-bottom: 50px;
@@ -250,7 +250,7 @@
     font-style: italic;
 }
 
-/* === СТАТУСЫ ПРОЕКТОВ === */
+/* === STATUS === */
 .status-badge {
     display: inline-block;
     padding: 6px 12px;
@@ -288,7 +288,7 @@
     border: 2px solid #dc3545;
 }
 
-/* === МОИ ЗАКАЗЫ === */
+/* === ORDERS === */
 .orders-grid {
     display: grid;
     gap: 20px;
@@ -402,7 +402,7 @@
     font-style: italic;
 }
 
-/* === МОДАЛЬНОЕ ОКНО КОНТАКТОВ === */
+/* === MODAL-WINDOW === */
 .modal {
     position: fixed;
     top: 0;
@@ -493,7 +493,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Адаптив для профиля */
+/* ADAPTIVE */
 @media (max-width: 768px) {
     .profile-header { 
         flex-direction: column; 

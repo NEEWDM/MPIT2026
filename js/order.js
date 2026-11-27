@@ -1,12 +1,8 @@
-/**
- * order.js
- * Логика модального окна покупки товара.
- * Открывается при клике на кнопку "Купить", отправляет заказ на сервер.
- */
+//логика модального окна закзазаызаваываывн
 
-// Глобальная функция для открытия модального окна покупки
+// глобальная функция чтобы открыть
 window.openOrderModal = function(productId, productTitle, productPrice) {
-    // Проверяем авторизацию
+    // авторизирован?
     const currentUser = JSON.parse(localStorage.getItem('tuscul_user'));
     
     if (!currentUser) {
@@ -15,7 +11,7 @@ window.openOrderModal = function(productId, productTitle, productPrice) {
         return;
     }
 
-    // Создаём модальное окно
+    // сделать окошко
     const modalHTML = `
         <div id="order-modal" class="order-modal">
             <div class="order-modal-content">
@@ -62,10 +58,10 @@ window.openOrderModal = function(productId, productTitle, productPrice) {
         </div>
     `;
 
-    // Добавляем модальное окно в body
+    // окошко в боди
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    // Обработчик изменения количества
+    // обработчик изменения количества
     const quantityInput = document.getElementById('order-quantity');
     const totalPriceElement = document.getElementById('order-total-price');
     
@@ -75,7 +71,7 @@ window.openOrderModal = function(productId, productTitle, productPrice) {
         totalPriceElement.textContent = `${total} ₽`;
     });
 
-    // Обработчик отправки формы
+    // обработчик отправки
     document.getElementById('order-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -120,7 +116,7 @@ window.openOrderModal = function(productId, productTitle, productPrice) {
     });
 };
 
-// Закрыть модальное окно
+// закрывание
 window.closeOrderModal = function() {
     const modal = document.getElementById('order-modal');
     if (modal) {
@@ -128,7 +124,7 @@ window.closeOrderModal = function() {
     }
 };
 
-// Закрытие по клику вне модального окна
+// закрывание по клику вне окна
 document.addEventListener('click', (e) => {
     const modal = document.getElementById('order-modal');
     if (modal && e.target === modal) {
@@ -136,7 +132,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Показать сообщение
+// показать сообщение
 function showOrderMessage(text, type) {
     const messageEl = document.getElementById('order-message');
     if (messageEl) {

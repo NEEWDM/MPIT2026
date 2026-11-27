@@ -1,8 +1,4 @@
-/**
- * author.js
- * Логика страницы публичного профиля автора.
- * Загружает данные автора и его работы из MongoDB по userId из URL.
- */
+//автор и работы по айди
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -16,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authorProductsGrid = document.getElementById('author-products-grid');
     const noProducts = document.getElementById('no-products');
 
-    // Получаем userId из URL параметров
+    // айди из юрл
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id');
 
@@ -25,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Загружаем данные автора
+    // загрузка данных автора
     loadAuthorProfile(userId);
 
     async function loadAuthorProfile(userId) {
         try {
-            // Загружаем данные пользователя
+            // все еще загрузка
             const userResponse = await fetch(`/api/user?id=${userId}`);
             const userData = await userResponse.json();
 
@@ -39,11 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Загружаем работы автора
+            // еще загрузка
             const productsResponse = await fetch(`/api/products?userId=${userId}`);
             const products = await productsResponse.json();
 
-            // Отображаем профиль
+            // отображение профиля
             displayAuthorProfile(userData, products);
 
         } catch (error) {
@@ -56,22 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingState.classList.add('hidden');
         authorProfile.classList.remove('hidden');
 
-        // Заполняем данные автора
+        // заполнение данных
         authorName.textContent = user.name;
         authorSchool.textContent = `🏫 ${user.school}`;
         
-        // Первая буква имени для аватара
+        // первая буковка
         document.getElementById('author-avatar-letter').textContent = user.name.charAt(0).toUpperCase();
 
-        // Навыки
+        // навыки
         if (user.skills) {
             authorSkills.innerHTML = `<span>${getCategoryName(user.skills)}</span>`;
         }
 
-        // Контакты
+        // контакты
         displayContacts(user.contacts);
 
-        // Работы
+        // проекты
         displayProducts(products);
     }
 

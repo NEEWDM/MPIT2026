@@ -1,8 +1,4 @@
-/**
- * api/update-contacts.js
- * Vercel Serverless Function для обновления контактов пользователя.
- * Принимает userId и новые контакты, обновляет запись в MongoDB.
- */
+// контакты в бд
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -45,14 +41,14 @@ module.exports = async function handler(req, res) {
         const database = clientConn.db('tuscul');
         const users = database.collection('users');
 
-        // Проверяем существование пользователя
+        // есть пользователь или суох
         const user = await users.findOne({ _id: new ObjectId(userId) });
         
         if (!user) {
             return res.status(404).json({ error: 'Пользователь не найден' });
         }
 
-        // Обновляем только поле contacts
+        // обновление контактов
         const result = await users.updateOne(
             { _id: new ObjectId(userId) },
             { $set: { contacts: contacts } }

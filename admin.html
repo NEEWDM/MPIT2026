@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <!-- Шапка -->
+    <!-- шапка -->
     <header class="site-header">
         <div class="container header-content">
             <div class="logo-area">
@@ -38,19 +38,19 @@
 
     <main class="container section-padding">
         
-        <!-- Проверка доступа -->
+        <!-- доступ есть? -->
         <div id="access-denied" class="access-denied hidden">
             <h2>🚫 Доступ запрещён</h2>
             <p>У вас нет прав администратора для просмотра этой страницы.</p>
             <a href="index.html" class="btn btn-primary">На главную</a>
         </div>
 
-        <!-- Админ-панель -->
+        <!-- панель -->
         <div id="admin-panel" class="hidden">
             <h1 class="admin-title">⚙️ Панель администратора</h1>
             <p class="admin-subtitle">Модерация заявок на публикацию проектов</p>
 
-            <!-- Статистика -->
+            <!-- статистика -->
             <div class="admin-stats">
                 <div class="stat-card">
                     <span class="stat-num" id="stat-pending">0</span>
@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <!-- Фильтры -->
+            <!-- фильтры -->
             <div class="admin-filters">
                 <button class="filter-btn active" data-filter="pending">⏳ На модерации</button>
                 <button class="filter-btn" data-filter="approved">✅ Одобрено</button>
@@ -74,12 +74,12 @@
                 <button class="filter-btn" data-filter="all">📋 Все заявки</button>
             </div>
 
-            <!-- Список заявок -->
+            <!-- заявки -->
             <div id="applications-list" class="applications-list">
                 <p class="loading-text">Загрузка заявок...</p>
             </div>
             
-                        <!-- Раздел заказов -->
+                        <!-- заказы -->
             <div style="margin-top:60px;">
                 <h2 style="margin-bottom:20px;">📦 Заказы на покупку</h2>
                 

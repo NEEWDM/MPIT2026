@@ -21,21 +21,19 @@ module.exports = async function handler(req, res) {
         if (req.method === 'GET') {
             const filter = {};
             
-            // По умолчанию показываем только одобренные проекты
-            // Если передан userId - показываем все проекты этого пользователя (для его профиля)
-            // Если передан status - фильтруем по статусу (для админки)
+            // жоская жесть отображений проектов
             
             if (req.query.userId) {
                 filter.userId = req.query.userId;
-                // Если есть параметр allStatus=true - показываем все статусы
+                // если все статусы включены, то все статусы показывает
                 if (req.query.allStatus !== 'true') {
                     filter.status = 'approved';
                 }
             } else if (req.query.status) {
-                // Фильтр по статусу (для админки)
+                // фильтр по статусу для админа
                 filter.status = req.query.status;
             } else {
-                // Публичный каталог - только одобренные
+                // каталог для нормальных людей
                 filter.status = 'approved';
             }
             

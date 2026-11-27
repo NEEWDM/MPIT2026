@@ -1,4 +1,4 @@
-/* === МОДАЛЬНОЕ ОКНО ПОКУПКИ === */
+/* === ORDER-MODAL === */
 
 .order-modal {
     position: fixed;
@@ -208,7 +208,7 @@
     }
 }
 
-/* === АДАПТИВНОСТЬ МОДАЛЬНОГО ОКНА ПОКУПКИ === */
+/* === ADAPTIVE === */
 @media (max-width: 600px) {
     .order-modal-content {
         padding: 25px 20px;

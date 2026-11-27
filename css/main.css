@@ -1,5 +1,5 @@
 :root {
-    /* палитра */
+    /* COLORS */
     --color-bg: #ffffff;          /*белый*/
     --color-text: #1a1a1a;        /*серый и текст*/
     --color-accent: #0055ff;      /*ярко синий*/
@@ -210,11 +210,11 @@ ul { list-style: none; }
     padding-top: 20px;
     font-size: 0.9rem;
 }
-/* === УТИЛИТАРНЫЙ КЛАСС СКРЫТИЯ === */
+/* === HIDING === */
 .hidden {
     display: none !important;
 }
-/* === ССЫЛКА НА АВТОРА === */
+/* === LINK === */
 .product-author {
     margin: 10px 0;
     font-size: 0.9rem;
@@ -228,9 +228,9 @@ ul { list-style: none; }
     transition: 0.3s;
 }
 
-/* === АДАПТИВНОСТЬ (МОБИЛЬНАЯ ВЕРСИЯ) === */
+/* === ADAPTIVE === */
 
-/* Бургер-меню (скрыто на десктопе) */
+/* BURGER-MENU */
 .burger-menu {
     display: none;
     flex-direction: column;
@@ -249,7 +249,7 @@ ul { list-style: none; }
     transition: 0.3s;
 }
 
-/* Планшеты (до 1024px) */
+/* TABLETS */
 @media (max-width: 1024px) {
     .container {
         padding: 0 15px;
@@ -269,9 +269,9 @@ ul { list-style: none; }
     }
 }
 
-/* Мобильные (до 768px) */
+/* MOBILE */
 @media (max-width: 768px) {
-    /* Шапка */
+    /* HEADER */
     .header-content {
         flex-wrap: wrap;
         gap: 15px;
@@ -345,7 +345,7 @@ ul { list-style: none; }
         font-size: 1.2rem;
     }
     
-    /* Hero секция */
+    /* HERO SECTION */
     .hero-section {
         padding: 40px 0;
     }
@@ -367,7 +367,7 @@ ul { list-style: none; }
         width: 100%;
     }
     
-    /* Сетки товаров */
+    /* GRID */
     .products-grid {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -385,21 +385,21 @@ ul { list-style: none; }
         font-size: 1.5rem;
     }
     
-    /* Footer */
+    /* FOOTER */
     .footer-content {
         grid-template-columns: 1fr;
         gap: 25px;
         text-align: center;
     }
     
-    /* Кнопки */
+    /* BUTTONS */
     .btn {
         padding: 10px 18px;
         font-size: 0.9rem;
     }
 }
 
-/* Маленькие мобильные (до 480px) */
+/* SMALL MOBILES */
 @media (max-width: 480px) {
     .hero-content h2 {
         font-size: 1.5rem;

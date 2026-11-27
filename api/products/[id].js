@@ -1,7 +1,4 @@
-/**
- * api/products/[id].js
- * API для удаления проекта администратором.
- */
+//удаление администратором
 
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -36,14 +33,14 @@ module.exports = async function handler(req, res) {
         const users = database.collection('users');
         const products = database.collection('products');
 
-        // Проверяем админа
+        // проверка на админность
         const admin = await users.findOne({ _id: new ObjectId(adminId) });
         
         if (!admin || !admin.isAdmin) {
             return res.status(403).json({ error: 'Доступ запрещён' });
         }
 
-        // Удаляем проект
+        // удаление
         const result = await products.deleteOne({ _id: new ObjectId(id) });
 
         if (result.deletedCount === 0) {
