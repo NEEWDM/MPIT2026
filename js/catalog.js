@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         products.forEach(product => {
             const authorLink = product.userId ? `author.html?id=${product.userId}` : '#';
-            
             const productData = encodeURIComponent(JSON.stringify(product));
             
             const cardHTML = `
@@ -65,13 +64,44 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="product-price">${product.price} ₽</span>
                             <span class="product-school">🏫 ${product.school}</span>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="openOrderModal('${product._id}', '${product.title}', ${product.price})">
+                        <button class="btn btn-primary buy-button" style="width:100%; margin-top:15px;"
+                                data-id="${product._id}" 
+                                data-title="${product.title}" 
+                                data-price="${product.price}">
                             Купить
                         </button>
                     </div>
                 </article>
             `;
             catalogGrid.insertAdjacentHTML('beforeend', cardHTML);
+        });
+
+        // Обработчики на кликабельные изображения
+        document.querySelectorAll('.product-image-clickable').forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', (e) => {
+                try {
+                    const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
+                    if (typeof openProductModal === 'function') {
+                        openProductModal(productData);
+                    }
+                } catch (error) {
+                    console.error('Ошибка открытия модалки:', error);
+                }
+            });
+        });
+
+        // Обработчики на кнопки "Купить"
+        document.querySelectorAll('.buy-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const title = e.target.dataset.title;
+                const price = parseInt(e.target.dataset.price);
+                
+                if (typeof openOrderModal === 'function') {
+                    openOrderModal(id, title, price);
+                }
+            });
         });
     }
 

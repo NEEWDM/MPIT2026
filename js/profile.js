@@ -171,13 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '<p>Загрузка...</p>';
 
         try {
-            // все проекты пользователя
             const response = await fetch('/api/products?userId=' + currentUser.id + '&allStatus=true');
             const myProducts = await response.json();
 
             grid.innerHTML = '';
 
-            // в подсчет только одобренные
             const approvedCount = myProducts.filter(p => p.status === 'approved').length;
             document.getElementById('stat-products').textContent = approvedCount;
 
@@ -187,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             myProducts.forEach(product => {
-                // статус и стиль
                 let statusBadge = '';
                 let cardClass = '';
                 
@@ -202,9 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     cardClass = 'product-card-rejected';
                 }
 
+                const productData = encodeURIComponent(JSON.stringify(product));
+
                 const cardHTML = `
                     <article class="product-card ${cardClass}">
-                        <img src="${product.image}" alt="${product.title}" class="product-image"
+                        <img src="${product.image}" alt="${product.title}" class="product-image product-image-clickable"
+                             data-product='${productData}'
                              onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                         <div class="product-info">
                             ${statusBadge}
@@ -219,6 +219,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 grid.insertAdjacentHTML('beforeend', cardHTML);
             });
+
+            // Обработчики на кликабельные изображения
+            document.querySelectorAll('.product-image-clickable').forEach(img => {
+                img.style.cursor = 'pointer';
+                img.addEventListener('click', (e) => {
+                    try {
+                        const productData = JSON.parse(decodeURIComponent(e.target.dataset.product));
+                        if (typeof openProductModal === 'function') {
+                            openProductModal(productData);
+                        }
+                    } catch (error) {
+                        console.error('Ошибка открытия модалки:', error);
+                    }
+                });
+            });
+
         } catch (error) {
             console.error('Ошибка загрузки моих товаров:', error);
             grid.innerHTML = '<div class="empty-state">Не удалось загрузить товары</div>';
